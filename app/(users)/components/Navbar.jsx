@@ -244,7 +244,7 @@ const Navbar = () => {
               <img
                 src="/vectenoLogo.webp"
                 alt="Vecteno"
-                className="text-2xl font-semibold h-25 w-65 object-contain group-hover:scale-105 transition-transform duration-300"
+                className="text-2xl font-semibold h-20 w-65 object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </Link>
 
