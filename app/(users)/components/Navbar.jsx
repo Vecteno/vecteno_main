@@ -205,6 +205,14 @@ const Navbar = () => {
     };
     fetchCategories();
   }, []);
+  const handleLogout = async () => {
+  await fetch("/api/logout", {
+    method: "POST",
+  });
+
+  window.location.href = "/login"; // Or wherever you want them to land
+};
+
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -431,15 +439,7 @@ const Navbar = () => {
                       </Link>
                     </li>
                     <li>
-                      <button
-                        onClick={async () => {
-                          await fetch("/api/logout", { method: "POST" });
-                          signOut({ callbackUrl: "/login" });
-                        }}
-                        className="w-full text-left px-4 py-3 hover:bg-red-50 hover:text-red-600 cursor-pointer font-medium transition-colors duration-200"
-                      >
-                        Logout
-                      </button>
+                      <button onClick={handleLogout}>Logout</button>
                     </li>
                   </ul>
                 )}
@@ -659,15 +659,8 @@ const Navbar = () => {
                       My Profile
                     </Link>
 
-                    <button
-                      onClick={async () => {
-                        await fetch("/api/logout", { method: "POST" });
-                        signOut({ callbackUrl: "/" });
-                      }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    >
-                      Logout
-                    </button>
+                    <button onClick={handleLogout}>Logout</button>
+
                   </div>
                 ) : (
                   <Link href="/login">
