@@ -39,10 +39,12 @@ export async function GET(request, { params }) {
       fileBuffer = Buffer.from(await res.arrayBuffer());
     } else {
       // Local file
-      const relativePath = downloadUrl.startsWith("/")
-        ? downloadUrl.slice(1)
+
+      const relativePath = downloadUrl.startsWith("/api/uploads/")
+        ? downloadUrl.replace("/api/uploads/", "")
         : downloadUrl;
-      const fullPath = path.join(process.cwd(), "public", relativePath);
+
+      const fullPath = path.join(process.cwd(), "storage", relativePath);
 
       if (!fs.existsSync(fullPath)) {
         return new Response(JSON.stringify({ error: "Local file not found" }), {
