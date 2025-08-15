@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test 2FA Toggle</title>
+</head>
+<body>
+    <h1>Test 2FA Toggle</h1>
+    <button onclick="testLogin()">1. Login</button>
+    <button onclick="testToggle2FA(true)">2. Enable 2FA</button>
+    <button onclick="testToggle2FA(false)">3. Disable 2FA</button>
+    <button onclick="testProfile()">4. Check Profile</button>
+    <pre id="output"></pre>
+
+    <script>
+        const output = document.getElementById('output');
+        let token = '';
+
+        async function testLogin() {
+            try {
+                const response = await fetch('/api/adminLogin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'admin@gmail.com',
+                        password: 'admin@123'
+                    })
+                });
+                
+                const data = await response.json();
+                output.textContent = 'Login Response:\n' + JSON.stringify(data, null, 2);
+                
+                if (data.token) {
+                    token = data.token;
+                    localStorage.setItem('adminToken', token);
+                    console.log('Token saved:', token);
+                }
+            } catch (error) {
+                output.textContent = 'Login Error: ' + error.message;
+            }
+        }
+
+        async function testToggle2FA(enable) {
+            if (!token) {
+                token = localStorage.getItem('adminToken');
+            }
+            
+            if (!token) {
+                output.textContent = 'No token found. Please login first.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/toggle-2fa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        twoFactorEnabled: enable
+                    })
+                });
+                
+                const data = await response.json();
+                output.textContent = `Toggle 2FA (${enable}) Response:\n` + JSON.stringify(data, null, 2);
+            } catch (error) {
+                output.textContent = 'Toggle 2FA Error: ' + error.message;
+            }
+        }
+
+        async function testProfile() {
+            if (!token) {
+                token = localStorage.getItem('adminToken');
+            }
+            
+            if (!token) {
+                output.textContent = 'No token found. Please login first.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                output.textContent = 'Profile Response:\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                output.textContent = 'Profile Error: ' + error.message;
+            }
+        }
+
+        // Load token on page load
+        window.onload = function() {
+            token = localStorage.getItem('adminToken') || '';
+            if (token) {
+                output.textContent = 'Token loaded from localStorage:\n' + token.substring(0, 50) + '...';
+            } else {
+                output.textContent = 'No token found. Please login first.';
+            }
+        };
+    </script>
+</body>
+</html>
