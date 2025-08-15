@@ -1,11 +1,30 @@
-import { cookies } from "next/headers"
-import { NextResponse } from "next/server"
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
-export async function POST(){
-    cookies().set('token','',{
-        path:'/',
-        maxAge:0,
-    })
+export async function POST() {
+  const cookieStore = cookies();
 
-    return NextResponse.json({message:'Logged out Successfully', status:200})
+  // Clear custom JWT token
+  cookieStore.set("token", "", {
+    path: "/",
+    maxAge: 0,
+  });
+
+  // Clear NextAuth session cookies (for Google login)
+  cookieStore.set("next-auth.session-token", "", {
+    path: "/",
+    maxAge: 0,
+  });
+
+  cookieStore.set("next-auth.csrf-token", "", {
+    path: "/",
+    maxAge: 0,
+  });
+
+  cookieStore.set("next-auth.callback-url", "", {
+    path: "/",
+    maxAge: 0,
+  });
+
+  return NextResponse.json({ message: "Logged out Successfully", status: 200 });
 }

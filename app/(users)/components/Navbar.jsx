@@ -434,7 +434,7 @@ const Navbar = () => {
                       <button
                         onClick={async () => {
                           await fetch("/api/logout", { method: "POST" });
-                          signOut({ callbackUrl: "/" });
+                          signOut({ callbackUrl: "/login" });
                         }}
                         className="w-full text-left px-4 py-3 hover:bg-red-50 hover:text-red-600 cursor-pointer font-medium transition-colors duration-200"
                       >
