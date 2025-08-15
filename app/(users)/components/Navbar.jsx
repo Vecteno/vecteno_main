@@ -439,7 +439,7 @@ const Navbar = () => {
                       </Link>
                     </li>
                     <li>
-                      <button onClick={handleLogout}>Logout</button>
+                      <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
                     </li>
                   </ul>
                 )}
@@ -659,7 +659,7 @@ const Navbar = () => {
                       My Profile
                     </Link>
 
-                    <button onClick={handleLogout}>Logout</button>
+                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
 
                   </div>
                 ) : (
