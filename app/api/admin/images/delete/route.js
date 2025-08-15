@@ -4,6 +4,7 @@ import ImageModel from "@/app/models/Image";
 import { deleteFile } from "@/lib/fileUpload";
 import { checkAdminAuth } from "@/lib/adminAuth";
 import path from "path";
+import fs from "fs";
 
 export async function POST(req) {
   try {
@@ -22,20 +23,35 @@ export async function POST(req) {
       return NextResponse.json({ success: false, error: "Image not found" }, { status: 404 });
     }
 
-    // Helper: delete if path exists
+    // Helper to convert API URL → real storage path
+    const apiUrlToStoragePath = (fileUrl) => {
+      if (!fileUrl) return null;
+
+      // Remove leading /api/uploads/ and replace with storage/
+      let relativePath = fileUrl.replace(/^\/api\/uploads\//, "storage/");
+
+      // Join with project root path
+      return path.join(process.cwd(), relativePath);
+    };
+
+    // Helper to delete if path exists
     const tryDelete = (fileUrl, label) => {
-      if (!fileUrl) return;
-      const relativePath = fileUrl.startsWith("/") ? fileUrl.slice(1) : fileUrl;
-      const fullPath = path.join(process.cwd(), "public", relativePath);
-      const result = deleteFile(fullPath);
-      if (result.success) {
-        console.log(`✅ Deleted ${label}: ${relativePath}`);
+      const filePath = apiUrlToStoragePath(fileUrl);
+      if (!filePath) return;
+
+      if (fs.existsSync(filePath)) {
+        try {
+          fs.unlinkSync(filePath);
+          console.log(`✅ Deleted ${label}: ${filePath}`);
+        } catch (err) {
+          console.error(`❌ Failed to delete ${label}: ${filePath} - ${err.message}`);
+        }
       } else {
-        console.warn(`⚠ Could not delete ${label}: ${relativePath} - ${result.error}`);
+        console.warn(`⚠ File not found for ${label}: ${filePath}`);
       }
     };
 
-    // ✅ Delete files from disk
+    // ✅ Delete files from /storage
     tryDelete(image.imageUrl, "main image");
     tryDelete(image.thumbnailUrl, "thumbnail");
     tryDelete(image.downloadUrl, "download file");
