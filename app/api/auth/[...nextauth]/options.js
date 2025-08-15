@@ -5,9 +5,6 @@ import { downloadAndSaveImage } from "@/lib/imageUtils";
 import { verifyJWT } from "@/lib/jwt";
 import { cookies } from "next/headers";
 
-const isProd = process.env.NODE_ENV === "production";
-const isUsingHTTP = process.env.NEXTAUTH_URL?.startsWith("http://"); // detect non-HTTPS
-
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -19,36 +16,8 @@ export const authOptions = {
   pages: {
     signIn: "/login",
   },
-  cookies: {
-    sessionToken: {
-      name: `${isProd ? "__Secure-" : ""}next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: !isUsingHTTP, // secure=false if using HTTP (VPS without domain)
-      },
-    },
-    callbackUrl: {
-      name: `${isProd ? "__Secure-" : ""}next-auth.callback-url`,
-      options: {
-        sameSite: "lax",
-        path: "/",
-        secure: !isUsingHTTP,
-      },
-    },
-    csrfToken: {
-      name: `${isProd ? "__Host-" : ""}next-auth.csrf-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: !isUsingHTTP,
-      },
-    },
-  },
   callbacks: {
-    async jwt({ token, account, user }) {
+    async jwt({ token, account, user, req }) {
       // Handle Google OAuth login
       if (account && user) {
         await connectToDatabase();
@@ -56,13 +25,14 @@ export const authOptions = {
         const existingUser = await userModel.findOne({ email: user.email });
 
         if (!existingUser) {
+          // Download Google profile image and save locally
           let localImageUrl = null;
           if (user.image) {
             try {
               localImageUrl = await downloadAndSaveImage(user.image);
             } catch (error) {
-              console.error("Failed to download Google profile image:", error);
-              localImageUrl = null;
+              console.error('Failed to download Google profile image:', error);
+              localImageUrl = null; // Fallback to no image
             }
           }
 
@@ -75,34 +45,35 @@ export const authOptions = {
           });
           token.id = newUser._id;
           token.role = newUser.role;
-          token.picture = localImageUrl;
+          token.picture = localImageUrl; // Set local image URL
         } else {
           token.id = existingUser._id;
           token.role = existingUser.role;
-          token.picture = existingUser.profileImage;
+          token.picture = existingUser.profileImage; // Use existing local image
         }
 
         token.email = user.email;
         token.name = user.name;
+        // token.picture is already set above based on local/existing image
       }
-
+      
       // Check for custom JWT token if no NextAuth token exists
       if (!token.id) {
         try {
           const cookieStore = await cookies();
           const jwtToken = cookieStore.get("token")?.value;
-
+          
           if (jwtToken) {
             const decoded = await verifyJWT(jwtToken);
             if (decoded && decoded.id) {
               await connectToDatabase();
-              const userDoc = await userModel.findById(decoded.id);
-              if (userDoc) {
-                token.id = userDoc._id;
-                token.role = userDoc.role;
-                token.email = userDoc.email;
-                token.name = userDoc.name;
-                token.picture = userDoc.profileImage;
+              const user = await userModel.findById(decoded.id);
+              if (user) {
+                token.id = user._id;
+                token.role = user.role;
+                token.email = user.email;
+                token.name = user.name;
+                token.picture = user.profileImage;
               }
             }
           }
@@ -110,11 +81,12 @@ export const authOptions = {
           console.log("Error reading custom JWT:", error);
         }
       }
-
+      
       return token;
     },
 
     async session({ session, token }) {
+      // If no NextAuth session but we have custom JWT, create session
       if (!session?.user && token.id) {
         session = {
           user: {
@@ -122,16 +94,16 @@ export const authOptions = {
             email: token.email,
             name: token.name,
             image: token.picture,
-            role: token.role || "user",
+            role: token.role || "user"
           },
-          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
         };
       } else if (session?.user) {
         session.user.id = token.id;
         session.user.image = token.picture;
         session.user.role = token.role || "user";
       }
-
+      
       return session;
     },
   },
