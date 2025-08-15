@@ -6,7 +6,7 @@ import { verifyJWT } from "@/lib/jwt";
 import { cookies } from "next/headers";
 
 const isProd = process.env.NODE_ENV === "production";
-const usingIP = process.env.NEXTAUTH_URL?.includes("://31."); // crude check for IP usage
+const isUsingHTTP = process.env.NEXTAUTH_URL?.startsWith("http://"); // detect non-HTTPS
 
 export const authOptions = {
   providers: [
@@ -26,7 +26,7 @@ export const authOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: isProd && !usingIP ? true : false, // Allow non-secure cookies for IP testing
+        secure: !isUsingHTTP, // secure=false if using HTTP (VPS without domain)
       },
     },
     callbackUrl: {
@@ -34,7 +34,7 @@ export const authOptions = {
       options: {
         sameSite: "lax",
         path: "/",
-        secure: isProd && !usingIP ? true : false,
+        secure: !isUsingHTTP,
       },
     },
     csrfToken: {
@@ -43,7 +43,7 @@ export const authOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: isProd && !usingIP ? true : false,
+        secure: !isUsingHTTP,
       },
     },
   },
