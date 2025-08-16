@@ -20,7 +20,7 @@ export async function POST(request){
             email,
             password:hashedPassword,
             mobile,
-            profile_pic:defaultImg,
+            profileImage:defaultImg,
         })
         await newUser.save();
         return NextResponse.json({message:'User Registered Successfully', status:201})
