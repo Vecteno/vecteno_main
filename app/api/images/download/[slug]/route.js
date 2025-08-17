@@ -4,8 +4,18 @@ import JSZip from "jszip";
 import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
 export async function GET(request, { params }) {
+  // ✅ Auth check
+  const session = await getServerSession(request, authOptions);
+  if (!session) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+
   const { slug } = params;
   await connectToDatabase();
 
@@ -26,9 +36,8 @@ export async function GET(request, { params }) {
   try {
     let fileBuffer;
 
-    // Check if the file is local or remote
+    // Remote vs Local
     if (/^https?:\/\//i.test(downloadUrl)) {
-      // Remote file
       const res = await fetch(downloadUrl);
       if (!res.ok) {
         return new Response(
@@ -38,8 +47,6 @@ export async function GET(request, { params }) {
       }
       fileBuffer = Buffer.from(await res.arrayBuffer());
     } else {
-      // Local file
-
       const relativePath = downloadUrl.startsWith("/api/uploads/")
         ? downloadUrl.replace("/api/uploads/", "")
         : downloadUrl;
@@ -54,7 +61,7 @@ export async function GET(request, { params }) {
       fileBuffer = fs.readFileSync(fullPath);
     }
 
-    // Prepare ZIP
+    // ZIP preparation
     const zip = new JSZip();
     const safeTitle = image.title.replace(/\s+/g, "_");
     const extension =
@@ -63,12 +70,8 @@ export async function GET(request, { params }) {
       "jpg";
     const fileName = `${safeTitle}.${extension}`;
 
-    // Add main file
     zip.file(fileName, fileBuffer);
 
-    // Add license file
-    const COMPANY_NAME = process.env.COMPANY_NAME || "YourCompanyName";
-    const WEBSITE_URL = process.env.WEBSITE_URL || "https://yourwebsite.com";
     zip.file(
       "LICENSE.txt",
       `LICENSE AGREEMENT
@@ -82,13 +85,12 @@ subject to the following conditions:
 2. You may include the asset in derivative works.
 3. You may NOT resell or redistribute the asset in its original form.
 4. You may NOT claim ownership of the original asset.
-
 `
     );
 
     const zipContent = await zip.generateAsync({ type: "uint8array" });
 
-    // Increment downloads atomically
+    // Increment downloads
     await ImageModel.updateOne({ _id: image._id }, { $inc: { downloads: 1 } });
 
     return new Response(zipContent, {

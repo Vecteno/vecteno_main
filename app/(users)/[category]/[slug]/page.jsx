@@ -102,34 +102,29 @@ export default function ProductDetailPage({ params }) {
   // *** UPDATED Download handler to fetch zip from API ***
   const handleDownload = async () => {
     try {
-      const response = await fetch(`/api/images/download/${slug}`);
+      const response = await fetch(`/api/images/download/${image.slug}`, {
+        method: "GET",
+        credentials: "include", // 🔑 send session cookies
+      });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        alert("Failed to download: " + (errorData.error || "Unknown error"));
+        const errorData = await response.json();
+        alert(`Failed to download: ${errorData.error || response.statusText}`);
         return;
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-
-      // Try to extract filename from content-disposition header
-      let filename = "download.zip";
-      const disposition = response.headers.get("Content-Disposition");
-      if (disposition && disposition.includes("filename=")) {
-        filename = disposition.split("filename=")[1].replace(/"/g, "");
-      }
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${image.title}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Download error:", error);
-      alert("Failed to download");
+      alert("An error occurred while downloading");
     }
   };
 
@@ -415,7 +410,6 @@ export default function ProductDetailPage({ params }) {
                   )}
                 </button>
 
-
                 {/* Premium/Free other buttons here */}
                 {image.type === "premium" ? (
                   <button
@@ -435,7 +429,6 @@ export default function ProductDetailPage({ params }) {
                   </button>
                 )}
               </div>
-              
 
               {/* Action Buttons */}
               <div className="flex items-center justify-between space-x-4">
