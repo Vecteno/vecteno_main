@@ -102,7 +102,10 @@ export default function ProductDetailPage({ params }) {
   // *** UPDATED Download handler to fetch zip from API ***
   const handleDownload = async () => {
     try {
-      const response = await fetch(`/api/images/download/${slug}`);
+      const response = await fetch(`/api/images/download/${slug}`, {
+        method: "GET",
+        credentials: "include", // 🔑 include session cookies
+      });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -113,7 +116,6 @@ export default function ProductDetailPage({ params }) {
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
-      // Try to extract filename from content-disposition header
       let filename = "download.zip";
       const disposition = response.headers.get("Content-Disposition");
       if (disposition && disposition.includes("filename=")) {
