@@ -4,16 +4,38 @@ import JSZip from "jszip";
 import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import userModel from "@/app/models/userModel";
 
 export async function GET(request, { params }) {
   const { slug } = params;
   await connectToDatabase();
 
+  // 🔐 Check user authentication
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+
+  // Fetch image
   const image = await ImageModel.findOne({ slug });
   if (!image) {
     return new Response(JSON.stringify({ error: "Image not found" }), {
       status: 404,
     });
+  }
+
+  // 🔐 If image is premium, ensure user has premium plan
+  if (image.type === "premium") {
+    const user = await userModel.findById(session.user.id);
+    if (!user?.isPremium) {
+      return new Response(JSON.stringify({ error: "Premium access required" }), {
+        status: 403,
+      });
+    }
   }
 
   const downloadUrl = image.downloadUrl || image.imageUrl;
@@ -28,7 +50,6 @@ export async function GET(request, { params }) {
 
     // Check if the file is local or remote
     if (/^https?:\/\//i.test(downloadUrl)) {
-      // Remote file
       const res = await fetch(downloadUrl);
       if (!res.ok) {
         return new Response(
@@ -38,12 +59,9 @@ export async function GET(request, { params }) {
       }
       fileBuffer = Buffer.from(await res.arrayBuffer());
     } else {
-      // Local file
-
       const relativePath = downloadUrl.startsWith("/api/uploads/")
         ? downloadUrl.replace("/api/uploads/", "")
         : downloadUrl;
-
       const fullPath = path.join(process.cwd(), "storage", relativePath);
 
       if (!fs.existsSync(fullPath)) {
@@ -63,12 +81,9 @@ export async function GET(request, { params }) {
       "jpg";
     const fileName = `${safeTitle}.${extension}`;
 
-    // Add main file
     zip.file(fileName, fileBuffer);
 
     // Add license file
-    const COMPANY_NAME = process.env.COMPANY_NAME || "YourCompanyName";
-    const WEBSITE_URL = process.env.WEBSITE_URL || "https://yourwebsite.com";
     zip.file(
       "LICENSE.txt",
       `LICENSE AGREEMENT
@@ -82,7 +97,6 @@ subject to the following conditions:
 2. You may include the asset in derivative works.
 3. You may NOT resell or redistribute the asset in its original form.
 4. You may NOT claim ownership of the original asset.
-
 `
     );
 
