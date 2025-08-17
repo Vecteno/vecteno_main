@@ -99,23 +99,40 @@ export default function ProductDetailPage({ params }) {
     }
   };
 
-  // *** UPDATED Download handler to fetch zip from API ***
+  // Download handler with permission logic
   const handleDownload = async () => {
+    if (!session?.user) {
+      window.location.href = "/login";
+      return;
+    }
+    if (image.type === "premium" && (!userPlan || userPlan.status !== "active" || userPlan.type !== "premium")) {
+      window.location.href = "/pricing";
+      return;
+    }
+    setIsDownloading(true);
     try {
-      const response = await fetch(`/api/images/download/${product.slug}`, {
+      const response = await fetch(`/api/images/download/${image.slug}`, {
         method: "GET",
-        credentials: "include", // 🔑 this ensures cookies/session are sent
+        credentials: "include",
       });
-
       if (!response.ok) {
-        throw new Error("Failed to download: " + response.statusText);
+        let errorMsg = "An error occurred while downloading";
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.error) {
+            errorMsg = errorData.error;
+          }
+        } catch (jsonErr) {
+          // Not JSON, keep default message
+        }
+        alert(errorMsg);
+        return;
       }
-
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${product.title}.zip`; // or .jpg / .png depending
+      a.download = `${image.title}.zip`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -123,6 +140,8 @@ export default function ProductDetailPage({ params }) {
     } catch (error) {
       console.error("Download error:", error);
       alert("An error occurred while downloading");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -144,35 +163,32 @@ export default function ProductDetailPage({ params }) {
     }
   };
 
-  // Determine download button config
+  // Download button config logic (for button text and click)
   const getDownloadButtonConfig = () => {
     if (!session?.user) {
       return {
         text: "Login to Download",
         onClick: () => (window.location.href = "/login"),
+        disabled: false,
         className:
           "w-full bg-gray-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors flex items-center justify-center gap-2",
       };
     }
-
     if (image.type === "free") {
       return {
         text: "Free Download",
         onClick: handleDownload,
+        disabled: isDownloading,
         className:
           "w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2",
       };
     }
-
     if (image.type === "premium") {
-      if (
-        userPlan &&
-        userPlan.status === "active" &&
-        userPlan.type === "premium"
-      ) {
+      if (userPlan && userPlan.status === "active" && userPlan.type === "premium") {
         return {
           text: "Premium Download",
           onClick: handleDownload,
+          disabled: isDownloading,
           className:
             "w-full bg-yellow-500 text-black py-4 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors flex items-center justify-center gap-2",
         };
@@ -180,6 +196,7 @@ export default function ProductDetailPage({ params }) {
         return {
           text: "Upgrade to Premium",
           onClick: () => (window.location.href = "/pricing"),
+          disabled: false,
           className:
             "w-full bg-yellow-500 text-black py-4 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors flex items-center justify-center gap-2",
         };
@@ -374,39 +391,28 @@ export default function ProductDetailPage({ params }) {
 
               {/* Download Buttons */}
               <div className="space-y-3">
-                <button
-                  onClick={handleDownload}
-                  disabled={isDownloading}
-                  className={`w-full py-4 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 ${
-                    isDownloading
-                      ? "bg-gray-400 cursor-not-allowed text-white"
-                      : image.type === "premium"
-                      ? userPlan &&
-                        userPlan.status === "active" &&
-                        userPlan.type === "premium"
-                        ? "bg-yellow-500 hover:bg-yellow-600 text-black cursor-pointer"
-                        : "bg-yellow-500 hover:bg-yellow-600 text-black cursor-pointer"
-                      : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-                  }`}
-                >
-                  {isDownloading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                      Downloading...
-                    </>
-                  ) : (
-                    <>
-                      <FaDownload />
-                      {image.type === "premium"
-                        ? userPlan &&
-                          userPlan.status === "active" &&
-                          userPlan.type === "premium"
-                          ? "Premium Download"
-                          : "Upgrade to Premium"
-                        : "Free Download"}
-                    </>
-                  )}
-                </button>
+                {(() => {
+                  const btn = getDownloadButtonConfig();
+                  return (
+                    <button
+                      onClick={btn.onClick}
+                      disabled={btn.disabled}
+                      className={btn.className}
+                    >
+                      {isDownloading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                          Downloading...
+                        </>
+                      ) : (
+                        <>
+                          <FaDownload />
+                          {btn.text}
+                        </>
+                      )}
+                    </button>
+                  );
+                })()}
 
                 {/* Premium/Free other buttons here */}
                 {image.type === "premium" ? (

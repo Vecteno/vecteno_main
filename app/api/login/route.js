@@ -34,15 +34,15 @@ export async function POST(request) {
     }
 
     const token = await generateJWT({ id: userExist._id.toString(), role: "user" });
-
     const cookieStore = await cookies();
+    // Always overwrite token cookie
     cookieStore.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" && process.env.NEXTAUTH_URL?.startsWith("https"),
       path: "/",
       maxAge: 60 * 60 * 24 * 7 // 7 days
     });
-
+    // Optionally, clear other session cookies here if needed
     return NextResponse.json({ message: "Login Successful", status: 200 });
 
   } catch (error) {

@@ -10,7 +10,33 @@ import userModel from "@/app/models/userModel";
 import Transaction from "@/app/models/transactionModel";
 
 export async function GET(request, { params }) {
-  const session = await getServerSession(authOptions);
+  // Debug: log cookies and session
+  try {
+    const cookieHeader = request.headers.get('cookie');
+    console.log('Cookie header:', cookieHeader);
+  } catch (err) {
+    console.log('Error reading cookie header:', err);
+  }
+  let session = await getServerSession(authOptions);
+  console.log('Session:', session);
+  // Fallback: decode custom JWT from 'token' cookie if session is null
+  if (!session?.user) {
+    try {
+      const cookieHeader = request.headers.get('cookie') || '';
+      const tokenMatch = cookieHeader.match(/token=([^;]+)/);
+      if (tokenMatch) {
+        const jwtToken = tokenMatch[1];
+        // Use your verifyJWT utility from your NextAuth config
+        const { verifyJWT } = await import('@/lib/jwt');
+        const decoded = await verifyJWT(jwtToken);
+        if (decoded && decoded.id) {
+          session = { user: { id: decoded.id, role: decoded.role } };
+        }
+      }
+    } catch (err) {
+      console.log('Custom JWT fallback error:', err);
+    }
+  }
   if (!session?.user) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }

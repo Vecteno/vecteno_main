@@ -26,7 +26,7 @@ export const authOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: isProd && !usingIP ? true : false,
+        secure: false, // Always false for easier local development
       },
     },
     callbackUrl: {
@@ -34,7 +34,7 @@ export const authOptions = {
       options: {
         sameSite: "lax",
         path: "/",
-        secure: isProd && !usingIP ? true : false,
+        secure: false,
       },
     },
     csrfToken: {
@@ -43,7 +43,7 @@ export const authOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: isProd && !usingIP ? true : false,
+        secure: false,
       },
     },
   },
