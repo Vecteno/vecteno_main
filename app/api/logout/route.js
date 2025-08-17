@@ -8,7 +8,7 @@ export async function POST() {
     path: "/",
     maxAge: 0,
   });
-  // Clear NextAuth session cookies (for Google login)
+  // Clear NextAuth session cookies (for Google login)  
   cookieStore.set("next-auth.session-token", "", {
     path: "/",
     maxAge: 0,
