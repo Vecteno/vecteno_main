@@ -6,14 +6,13 @@ import path from "path";
 import fetch from "node-fetch";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import userModel from "@/app/models/userModel";
+import Transaction from "@/app/models/transactionModel";
 
 export async function GET(request, { params }) {
-  // ✅ Auth check
-  const session = await getServerSession(request, authOptions);
-  if (!session) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-    });
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
   const { slug } = params;
@@ -21,29 +20,39 @@ export async function GET(request, { params }) {
 
   const image = await ImageModel.findOne({ slug });
   if (!image) {
-    return new Response(JSON.stringify({ error: "Image not found" }), {
-      status: 404,
+    return new Response(JSON.stringify({ error: "Image not found" }), { status: 404 });
+  }
+
+  // 🔹 If image is premium, verify user subscription
+  if (image.type === "premium") {
+    const user = await userModel.findById(session.user.id);
+    const now = new Date();
+    const activeTransactions = await Transaction.find({
+      userId: user._id,
+      expiresAt: { $gt: now },
     });
+
+    if (activeTransactions.length === 0) {
+      return new Response(JSON.stringify({ error: "Premium access required" }), {
+        status: 403,
+      });
+    }
   }
 
   const downloadUrl = image.downloadUrl || image.imageUrl;
   if (!downloadUrl) {
-    return new Response(JSON.stringify({ error: "Download URL missing" }), {
-      status: 404,
-    });
+    return new Response(JSON.stringify({ error: "Download URL missing" }), { status: 404 });
   }
 
   try {
     let fileBuffer;
 
-    // Remote vs Local
     if (/^https?:\/\//i.test(downloadUrl)) {
       const res = await fetch(downloadUrl);
       if (!res.ok) {
-        return new Response(
-          JSON.stringify({ error: "Failed to fetch remote file" }),
-          { status: 502 }
-        );
+        return new Response(JSON.stringify({ error: "Failed to fetch remote file" }), {
+          status: 502,
+        });
       }
       fileBuffer = Buffer.from(await res.arrayBuffer());
     } else {
@@ -61,7 +70,6 @@ export async function GET(request, { params }) {
       fileBuffer = fs.readFileSync(fullPath);
     }
 
-    // ZIP preparation
     const zip = new JSZip();
     const safeTitle = image.title.replace(/\s+/g, "_");
     const extension =
@@ -90,7 +98,6 @@ subject to the following conditions:
 
     const zipContent = await zip.generateAsync({ type: "uint8array" });
 
-    // Increment downloads
     await ImageModel.updateOne({ _id: image._id }, { $inc: { downloads: 1 } });
 
     return new Response(zipContent, {
