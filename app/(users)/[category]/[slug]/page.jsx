@@ -102,22 +102,20 @@ export default function ProductDetailPage({ params }) {
   // *** UPDATED Download handler to fetch zip from API ***
   const handleDownload = async () => {
     try {
-      const response = await fetch(`/api/images/download/${image.slug}`, {
+      const response = await fetch(`/api/images/download/${product.slug}`, {
         method: "GET",
-        credentials: "include", // 🔑 send session cookies
+        credentials: "include", // 🔑 this ensures cookies/session are sent
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        alert(`Failed to download: ${errorData.error || response.statusText}`);
-        return;
+        throw new Error("Failed to download: " + response.statusText);
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${image.title}.zip`;
+      a.download = `${product.title}.zip`; // or .jpg / .png depending
       document.body.appendChild(a);
       a.click();
       a.remove();
