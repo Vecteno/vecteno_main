@@ -102,10 +102,7 @@ export default function ProductDetailPage({ params }) {
   // *** UPDATED Download handler to fetch zip from API ***
   const handleDownload = async () => {
     try {
-      const response = await fetch(`/api/images/download/${slug}`, {
-        method: "GET",
-        credentials: "include", // 🔑 include session cookies
-      });
+      const response = await fetch(`/api/images/download/${slug}`);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -116,6 +113,7 @@ export default function ProductDetailPage({ params }) {
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
+      // Try to extract filename from content-disposition header
       let filename = "download.zip";
       const disposition = response.headers.get("Content-Disposition");
       if (disposition && disposition.includes("filename=")) {
@@ -382,51 +380,41 @@ export default function ProductDetailPage({ params }) {
               )}
 
               {/* Download Buttons */}
-              {/* Download Buttons */}
               <div className="space-y-3">
-                {!session?.user ? (
-                  <button
-                    onClick={() => (window.location.href = "/login")}
-                    className="w-full bg-gray-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <FaDownload />
-                    Login to Download
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleDownload}
-                    disabled={isDownloading}
-                    className={`w-full py-4 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 ${
-                      isDownloading
-                        ? "bg-gray-400 cursor-not-allowed text-white"
-                        : image.type === "premium"
+                <button
+                  onClick={handleDownload}
+                  disabled={isDownloading}
+                  className={`w-full py-4 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 ${
+                    isDownloading
+                      ? "bg-gray-400 cursor-not-allowed text-white"
+                      : image.type === "premium"
+                      ? userPlan &&
+                        userPlan.status === "active" &&
+                        userPlan.type === "premium"
+                        ? "bg-yellow-500 hover:bg-yellow-600 text-black cursor-pointer"
+                        : "bg-yellow-500 hover:bg-yellow-600 text-black cursor-pointer"
+                      : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                  }`}
+                >
+                  {isDownloading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                      Downloading...
+                    </>
+                  ) : (
+                    <>
+                      <FaDownload />
+                      {image.type === "premium"
                         ? userPlan &&
                           userPlan.status === "active" &&
                           userPlan.type === "premium"
-                          ? "bg-yellow-500 hover:bg-yellow-600 text-black cursor-pointer"
-                          : "bg-yellow-500 hover:bg-yellow-600 text-black cursor-pointer"
-                        : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-                    }`}
-                  >
-                    {isDownloading ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                        Downloading...
-                      </>
-                    ) : (
-                      <>
-                        <FaDownload />
-                        {image.type === "premium"
-                          ? userPlan &&
-                            userPlan.status === "active" &&
-                            userPlan.type === "premium"
-                            ? "Premium Download"
-                            : "Upgrade to Premium"
-                          : "Free Download"}
-                      </>
-                    )}
-                  </button>
-                )}
+                          ? "Premium Download"
+                          : "Upgrade to Premium"
+                        : "Free Download"}
+                    </>
+                  )}
+                </button>
+
 
                 {/* Premium/Free other buttons here */}
                 {image.type === "premium" ? (
@@ -447,6 +435,7 @@ export default function ProductDetailPage({ params }) {
                   </button>
                 )}
               </div>
+              
 
               {/* Action Buttons */}
               <div className="flex items-center justify-between space-x-4">
