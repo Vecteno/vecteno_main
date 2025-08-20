@@ -69,6 +69,7 @@ export async function GET(request) {
         profileImage: user.profileImage,
         isPremium,
         premiumExpiresAt,
+        mobile: user.mobile || "",
       },
     });
   } catch (err) {
