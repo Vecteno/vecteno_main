@@ -184,16 +184,16 @@ const ClientReviews = () => {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-12 border-t border-gray-200">
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">10K+</div>
-            <div className="text-gray-600 font-medium">Happy Customers</div>
+            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">2K+</div>
+            <div className="text-gray-600 font-medium">Happy Users</div>
           </div>
           <div className="text-center">
             <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-2">50K+</div>
             <div className="text-gray-600 font-medium">Downloads</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">4.9</div>
-            <div className="text-gray-600 font-medium">Average Rating</div>
+            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">4.5</div>
+            <div className="text-gray-600 font-medium">Average Rating</div> 
           </div>
           <div className="text-center">
             <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-2">24/7</div>

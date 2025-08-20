@@ -154,21 +154,21 @@ const HomePage = () => {
   };
 
   const handleSearch = (e) => {
-  e.preventDefault();
-  const query = searchQuery.trim();
-  if (query) {
-    // Include category only if selectedCategory is not "All" or empty
-    const categoryParam = selectedCategory && selectedCategory !== "All"
-      ? `&category=${encodeURIComponent(selectedCategory)}`
-      : "";
+    e.preventDefault();
+    const query = searchQuery.trim();
+    if (query) {
+      // Include category only if selectedCategory is not "All" or empty
+      const categoryParam =
+        selectedCategory && selectedCategory !== "All"
+          ? `&category=${encodeURIComponent(selectedCategory)}`
+          : "";
 
-    router.push(`/search?q=${encodeURIComponent(query)}${categoryParam}`);
+      router.push(`/search?q=${encodeURIComponent(query)}${categoryParam}`);
 
-    setSearchQuery("");
-    setShowSearchDropdown(false);
-  }
-};
-
+      setSearchQuery("");
+      setShowSearchDropdown(false);
+    }
+  };
 
   const handleSearchResultClick = (result) => {
     router.push(`/${result.category.replace(/\s+/g, "-")}/${result.slug}`);
@@ -235,30 +235,57 @@ const HomePage = () => {
           ref={searchRef}
         >
           {/* Dropdown - Hidden on Mobile */}
-          <div className="relative w-full md:w-auto border md:border-none mr-3 hidden md:block">
+          <div
+            className="relative w-full md:w-auto hidden md:block mr-3"
+            onMouseEnter={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+          >
+            {/* Dropdown Button */}
             <button
-              onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center text-black px-4 py-2 rounded md:rounded md:rounded-r-none w-full md:w-48 justify-between"
+              className="flex items-center justify-between w-full md:w-52 px-4 py-2.5 
+      bg-gradient-to-r from-blue-500 to-blue-600 text-white 
+      font-medium rounded-3xl shadow-md hover:shadow-lg 
+      hover:from-blue-600 hover:to-blue-700 
+      transition-all duration-200"
             >
               {selectedCategory}
-              <IoIosArrowDown className="ml-2" />
+              <IoIosArrowDown
+                className={`ml-2 transform transition-transform duration-200 ${
+                  showDropdown ? "rotate-180" : "rotate-0"
+                }`}
+              />
             </button>
 
+            {/* Dropdown Menu */}
             {showDropdown && (
-              <ul className="absolute left-0 mt-2 w-40 bg-white border rounded shadow-md transition duration-200 z-50">
-                {dropdownCategories.map((cat, idx) => (
-                  <li
-                    key={idx}
-                    onClick={() => {
-                      setSelectedCategory(cat);
-                      setShowDropdown(false);
-                    }}
-                    className="px-4 py-2 hover:bg-gray-100 text-sm cursor-pointer text-black"
-                  >
-                    {cat}
-                  </li>
-                ))}
-              </ul>
+              <div
+                className="absolute top-full left-0 mt-0 bg-white border border-gray-200 
+        rounded-xl shadow-xl z-50  backdrop-blur-sm p-2 flex gap-4"
+              >
+                {Array.from(
+                  { length: Math.ceil(dropdownCategories.length / 6) },
+                  (_, colIndex) => (
+                    <ul key={colIndex} className="w-35">
+                      {dropdownCategories
+                        .slice(colIndex * 6, colIndex * 6 + 6)
+                        .map((cat, idx) => (
+                          <li
+                            key={idx}
+                            onClick={() => {
+                              setSelectedCategory(cat);
+                              setShowDropdown(false); // 🔥 close on click
+                            }}
+                            className="px-4 py-2.5 text-sm text-gray-700 
+                    hover:bg-blue-50 hover:text-blue-600 
+                    cursor-pointer transition-colors duration-150"
+                          >
+                            {cat}
+                          </li>
+                        ))}
+                    </ul>
+                  )
+                )}
+              </div>
             )}
           </div>
 
@@ -344,18 +371,18 @@ const HomePage = () => {
 
         {/* Tab Navigation */}
         <div className="flex justify-center flex-wrap gap-4 mt-12 z-0 md:bg-gradient-to-r from-blue-500 to-blue-700 p-3 rounded-xl">
-      {tabOptions.map((tab, idx) => (
-        <button
-          key={idx}
-          onClick={() => handleTabClick(tab.label)}
-          className={`flex items-center space-x-2 px-6 py-3 rounded bg-blue-400 hover:bg-blue-700 transition h-20 cursor-pointer
+          {tabOptions.map((tab, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleTabClick(tab.label)}
+              className={`flex items-center space-x-2 px-6 py-3 rounded bg-blue-400 hover:bg-blue-700 transition h-20 cursor-pointer
             ${idx >= 3 ? "hidden md:flex" : ""}`}
-        >
-          {tab.icon}
-          <span className="text-sm font-medium">{tab.label}</span>
-        </button>
-      ))}
-    </div>
+            >
+              {tab.icon}
+              <span className="text-sm font-medium">{tab.label}</span>
+            </button>
+          ))}
+        </div>
       </section>
 
       <CategoriesSection />

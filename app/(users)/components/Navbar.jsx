@@ -206,13 +206,12 @@ const Navbar = () => {
     fetchCategories();
   }, []);
   const handleLogout = async () => {
-  await fetch("/api/logout", {
-    method: "POST",
-  });
+    await fetch("/api/logout", {
+      method: "POST",
+    });
 
-  window.location.href = "/login"; // Or wherever you want them to land
-};
-
+    window.location.href = "/login"; // Or wherever you want them to land
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -244,7 +243,7 @@ const Navbar = () => {
               <img
                 src="/vectenoLogo.webp"
                 alt="Vecteno"
-                className="text-2xl font-semibold h-20 w-65 object-contain group-hover:scale-105 transition-transform duration-300"
+                className="text-2xl font-semibold h-20 w-55 object-contain group-hover:opacity-90 transition-opacity duration-200"
               />
             </Link>
 
@@ -254,12 +253,16 @@ const Navbar = () => {
                 <span className="font-semibold">Categories</span>
                 <IoIosArrowDown className="ml-2 text-sm" />
               </button>
-              <ul className="absolute left-0 mt-3 w-48 bg-white border border-gray-200 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 backdrop-blur-sm max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100">
+
+              <ul
+                className="absolute left-0 mt-3 bg-white border border-gray-200 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 backdrop-blur-sm
+    grid grid-flow-col grid-rows-6 gap-x-6 p-2 max-h-[400px] overflow-y-auto auto-cols-max"
+              >
                 {categories.map((cat, idx) => (
                   <li key={idx}>
                     <Link
                       href={`/${cat.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="block px-4 py-3 hover:bg-blue-50 hover:text-blue-600 text-sm font-medium transition-colors duration-200 border-b border-gray-50 last:border-b-0"
+                      className="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap"
                     >
                       {cat}
                     </Link>
@@ -439,7 +442,12 @@ const Navbar = () => {
                       </Link>
                     </li>
                     <li>
-                      <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
                     </li>
                   </ul>
                 )}
@@ -659,8 +667,12 @@ const Navbar = () => {
                       My Profile
                     </Link>
 
-                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
-
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
                   </div>
                 ) : (
                   <Link href="/login">
