@@ -66,6 +66,7 @@ export async function GET(request) {
         id: user._id,
         email: user.email,
         name: user.name,
+        profileImage: user.profileImage,
         isPremium,
         premiumExpiresAt,
       },

@@ -18,6 +18,8 @@ export default function ProfileSettings() {
   const [preview, setPreview] = useState("");
   const [message, setMessage] = useState("");
 
+  console.log("ProfileSettings user:", user);
+
   useEffect(() => {
     const fetchUser = async () => {
       const res = await fetch("/api/profileInfo");
@@ -26,6 +28,7 @@ export default function ProfileSettings() {
         setUser(data.user);
         setNewName(data.user.name);
         setPreview(data.user.profileImage);
+        console.log("User Images:", data.user.profileImage);
       }
     };
     fetchUser();
