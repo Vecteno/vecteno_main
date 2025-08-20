@@ -3,7 +3,7 @@
 const DefaultUserIcon = ({ size = 44, className = "" }) => {
   return (
     <img
-      src="/storage/profile-images/default-image.jpg"
+      src="/storage/profileImages/default-image.jpg"
       alt="Default Avatar"
       className={`rounded-full object-cover ${className}`}
       style={{ width: size, height: size }}

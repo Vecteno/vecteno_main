@@ -177,9 +177,6 @@ export default function ProfileSettings() {
             ) : (
               <div className="mb-2">
                 <DefaultUserIcon size={128} className="shadow-lg" />
-                <p className="text-gray-500 text-sm mt-2 text-center">
-                  No profile image
-                </p>
               </div>
             )}
           </div>

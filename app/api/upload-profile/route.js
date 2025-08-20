@@ -5,7 +5,7 @@ export const POST = async (req) => {
   try {
     const formData = await req.formData();
     const imageFile = formData.get("image");
-    const type = "profile-images"; // force profile images type
+    const type = "profileImages"; // force profile images type
 
     if (!imageFile) {
       return NextResponse.json(

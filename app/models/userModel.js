@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ["user", "admin"], default: "user" },
   profileImage: {
     type: String,
-    default: "/api/uploads/profile-image/default-image.jpeg"
+    default: "/api/uploads/profileImages/default-image.jpg"
 
   },
   isPremium: { type: Boolean, default: false },
