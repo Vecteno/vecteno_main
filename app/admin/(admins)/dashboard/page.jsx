@@ -1,22 +1,35 @@
-'use client';
+"use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  FiUsers, 
-  FiImage, 
-  FiDownload, 
-  FiTrendingUp, 
-  FiEye, 
+import {
+  FiUsers,
+  FiImage,
+  FiDownload,
+  FiTrendingUp,
+  FiEye,
   FiHeart,
   FiDollarSign,
   FiActivity,
   FiClock,
   FiStar,
-  FiGift
+  FiGift,
 } from "react-icons/fi";
+import Link from "next/link";
 
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
+const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -25,7 +38,6 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [chartData, setChartData] = useState([]);
-
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -37,7 +49,7 @@ export default function AdminDashboard() {
           name,
           users: data.users[idx] || 0,
           images: data.images[idx] || 0,
-          downloads: data.downloads ? data.downloads[idx] || 0 : 0
+          downloads: data.downloads ? data.downloads[idx] || 0 : 0,
         }));
         setChartData(combined);
       }
@@ -48,36 +60,35 @@ export default function AdminDashboard() {
   // Check authentication first
   useEffect(() => {
     const checkAuth = async () => {
-      const adminToken = localStorage.getItem('adminToken');
-      
+      const adminToken = localStorage.getItem("adminToken");
+
       if (!adminToken) {
-        router.push('/admin/login');
+        router.push("/admin/login");
         return;
       }
-      
+
       try {
         // Verify token with server
-        const response = await fetch('/api/admin/verify', {
-          method: 'GET',
+        const response = await fetch("/api/admin/verify", {
+          method: "GET",
           headers: {
-            'Authorization': `Bearer ${adminToken}`
-          }
+            Authorization: `Bearer ${adminToken}`,
+          },
         });
-        
+
         if (!response.ok) {
           // Token is invalid, clear it and redirect to login
-          localStorage.removeItem('adminToken');
-          router.push('/admin/login');
+          localStorage.removeItem("adminToken");
+          router.push("/admin/login");
           return;
         }
-        
+
         // Token is valid, user is authenticated
         setIsAuthenticating(false);
-        
       } catch (error) {
         // Network error or API not available, redirect to login
-        localStorage.removeItem('adminToken');
-        router.push('/admin/login');
+        localStorage.removeItem("adminToken");
+        router.push("/admin/login");
       }
     };
 
@@ -87,7 +98,7 @@ export default function AdminDashboard() {
   // Fetch dashboard data only after authentication
   useEffect(() => {
     if (isAuthenticating) return; // Don't fetch data until authenticated
-    
+
     const fetchData = async () => {
       try {
         const res = await fetch("/api/admin/overview");
@@ -113,7 +124,9 @@ export default function AdminDashboard() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto mb-4"></div>
           <p className="text-gray-600">
-            {isAuthenticating ? 'Verifying authentication...' : 'Loading dashboard...'}
+            {isAuthenticating
+              ? "Verifying authentication..."
+              : "Loading dashboard..."}
           </p>
         </div>
       </div>
@@ -140,28 +153,31 @@ export default function AdminDashboard() {
       action: "New user registered",
       user: user.email,
       time: new Date(user.createdAt).toLocaleDateString(),
-      type: "user"
+      type: "user",
     })),
     ...(data.recentImages || []).slice(0, 2).map((image, index) => ({
       id: `image-${index}`,
       action: "Image uploaded",
       user: image.title,
       time: new Date(image.createdAt).toLocaleDateString(),
-      type: "upload"
-    }))
+      type: "upload",
+    })),
   ];
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Dashboard Overview</h1>
-        <p className="text-gray-600">Welcome back! Here's what's happening with your platform.</p>
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          Dashboard Overview
+        </h1>
+        <p className="text-gray-600">
+          Welcome back! Here's what's happening with your platform.
+        </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10 auto-rows-auto">
         <StatCard
           title="Total Users"
           value={data.userCount || 0}
@@ -186,6 +202,7 @@ export default function AdminDashboard() {
           icon={FiDollarSign}
           color="from-orange-500 to-orange-600"
         />
+        {/* Second row starts automatically */}
         <StatCard
           title="Trending Images"
           value={data.trendingCount || 0}
@@ -207,7 +224,9 @@ export default function AdminDashboard() {
           {/* Activity Chart */}
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-gray-800">Platform Activity</h3>
+              <h3 className="text-xl font-semibold text-gray-800">
+                Platform Activity
+              </h3>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
@@ -223,26 +242,31 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </div>
-            
+
             {/* Simple Bar Chart */}
             <div className="h-64 flex items-end justify-between gap-2">
               {chartData.map((item, index) => (
-                <div key={index} className="flex-1 flex flex-col items-center gap-2">
+                <div
+                  key={index}
+                  className="flex-1 flex flex-col items-center gap-2"
+                >
                   <div className="w-full flex items-end gap-1 h-48">
-                    <div 
+                    <div
                       className="flex-1 bg-blue-500 rounded-t"
                       style={{ height: `${(item.users / 100) * 100}%` }}
                     ></div>
-                    <div 
+                    <div
                       className="flex-1 bg-purple-500 rounded-t"
                       style={{ height: `${(item.images / 100) * 100}%` }}
                     ></div>
-                    <div 
+                    <div
                       className="flex-1 bg-green-500 rounded-t"
                       style={{ height: `${(item.downloads / 100) * 100}%` }}
                     ></div>
                   </div>
-                  <span className="text-xs text-gray-500 font-medium">{item.name}</span>
+                  <span className="text-xs text-gray-500 font-medium">
+                    {item.name}
+                  </span>
                 </div>
               ))}
             </div>
@@ -250,27 +274,22 @@ export default function AdminDashboard() {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <QuickActionCard
-              title="Upload Image"
-              description="Add new content to your platform"
-              icon={FiImage}
-              color="from-purple-500 to-purple-600"
-              href="/admin/dashboard/upload"
-            />
-            <QuickActionCard
-              title="Manage Users"
-              description="View and manage user accounts"
-              icon={FiUsers}
-              color="from-blue-500 to-blue-600"
-              href="/admin/dashboard/users"
-            />
-            <QuickActionCard
-              title="View Analytics"
-              description="Detailed platform analytics"
-              icon={FiTrendingUp}
-              color="from-green-500 to-green-600"
-              href="/admin/analytics"
-            />
+            <Link href="/admin/dashboard/images">
+              <QuickActionCard
+                title="Upload Image"
+                description="Add new content to your platform"
+                icon={FiImage}
+                color="from-purple-500 to-purple-600"
+              />
+            </Link>
+            <Link href="/admin/dashboard/users">
+              <QuickActionCard
+                title="Manage Users"
+                description="View and manage user accounts"
+                icon={FiUsers}
+                color="from-blue-500 to-blue-600"
+              />
+            </Link>
           </div>
         </div>
 
@@ -281,16 +300,17 @@ export default function AdminDashboard() {
               <div className="p-2 bg-blue-100 rounded-lg">
                 <FiActivity className="text-blue-600 text-xl" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800">Recent Activities</h3>
+              <h3 className="text-xl font-semibold text-gray-800">
+                Recent Activities
+              </h3>
             </div>
-            
+
             <div className="space-y-4">
               {recentActivities.map((activity) => (
                 <ActivityItem key={activity.id} activity={activity} />
               ))}
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -298,16 +318,20 @@ export default function AdminDashboard() {
 }
 
 // Stat Card Component
-function StatCard({ title, value, icon: Icon, color, change, changeType }) {
+function StatCard({ title, value, icon: Icon, color }) {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-      <div className="flex items-center justify-between">
-        <div className={`p-4 rounded-xl bg-gradient-to-r ${color}`}>
-          <Icon className="text-white text-2xl" />
+    <div className="bg-white rounded-3xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
+      <div className="flex items-center">
+        <div
+          className={`p-5 rounded-xl bg-gradient-to-r ${color} flex items-center justify-center transform transition-all duration-500 hover:scale-105`}
+        >
+          <Icon className="text-white text-3xl" />
         </div>
-        <div className="mx-2">
-          <p className="text-gray-600 text-sm font-medium">{title}</p>
-          <p className="text-2xl font-bold text-gray-800 mt-2">{value}</p>
+        <div className="ml-4 flex-1 flex flex-col">
+          <p className="text-gray-500 text-sm font-medium">{title}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 break-words">
+            {value}
+          </p>
         </div>
       </div>
     </div>
@@ -318,7 +342,9 @@ function StatCard({ title, value, icon: Icon, color, change, changeType }) {
 function QuickActionCard({ title, description, icon: Icon, color, href }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 cursor-pointer group">
-      <div className={`p-3 rounded-lg bg-gradient-to-r ${color} w-fit mb-4 group-hover:scale-110 transition-transform duration-300`}>
+      <div
+        className={`p-3 rounded-lg bg-gradient-to-r ${color} w-fit mb-4 group-hover:scale-110 transition-transform duration-300`}
+      >
         <Icon className="text-white text-xl" />
       </div>
       <h4 className="text-lg font-semibold text-gray-800 mb-2">{title}</h4>
@@ -331,12 +357,18 @@ function QuickActionCard({ title, description, icon: Icon, color, href }) {
 function ActivityItem({ activity }) {
   const getActivityIcon = (type) => {
     switch (type) {
-      case 'user': return <FiUsers className="text-blue-500" />;
-      case 'upload': return <FiImage className="text-purple-500" />;
-      case 'subscription': return <FiDollarSign className="text-green-500" />;
-      case 'download': return <FiDownload className="text-orange-500" />;
-      case 'offer': return <FiGift className="text-red-500" />;
-      default: return <FiActivity className="text-gray-500" />;
+      case "user":
+        return <FiUsers className="text-blue-500" />;
+      case "upload":
+        return <FiImage className="text-purple-500" />;
+      case "subscription":
+        return <FiDollarSign className="text-green-500" />;
+      case "download":
+        return <FiDownload className="text-orange-500" />;
+      case "offer":
+        return <FiGift className="text-red-500" />;
+      default:
+        return <FiActivity className="text-gray-500" />;
     }
   };
 
@@ -346,8 +378,12 @@ function ActivityItem({ activity }) {
         {getActivityIcon(activity.type)}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-800 truncate">{activity.action}</p>
-        <p className="text-xs text-gray-500">{activity.user} • {activity.time}</p>
+        <p className="text-sm font-medium text-gray-800 truncate">
+          {activity.action}
+        </p>
+        <p className="text-xs text-gray-500">
+          {activity.user} • {activity.time}
+        </p>
       </div>
     </div>
   );
