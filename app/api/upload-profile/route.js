@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { uploadFile } from "@/lib/fileUpload";
+import { deleteOldImage } from "@/lib/imageUtils";
 
 export const POST = async (req) => {
   try {
     const formData = await req.formData();
     const imageFile = formData.get("image");
-    const userId = formData.get("userId"); // frontend must send logged-in userId
+    const oldImage = formData.get("oldImage");
     const type = "profileImages"; // force profile images type
 
     if (!imageFile) {
@@ -17,7 +18,6 @@ export const POST = async (req) => {
 
     // Upload to storage/profile-images
     const imageRes = await uploadFile(imageFile, type);
-
     if (!imageRes.success) {
       return NextResponse.json(
         { success: false, error: "Failed to upload image: " + imageRes.error },
@@ -25,10 +25,10 @@ export const POST = async (req) => {
       );
     }
 
-    if (user.profileImage) {
-      deleteOldImage(user.profileImage);
+    if (oldImage) {
+      deleteOldImage(oldImage);
     }
-    
+
     return NextResponse.json({
       success: true,
       url: imageRes.url, // URL for frontend
