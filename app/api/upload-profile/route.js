@@ -5,6 +5,7 @@ export const POST = async (req) => {
   try {
     const formData = await req.formData();
     const imageFile = formData.get("image");
+    const userId = formData.get("userId"); // frontend must send logged-in userId
     const type = "profileImages"; // force profile images type
 
     if (!imageFile) {
@@ -24,6 +25,10 @@ export const POST = async (req) => {
       );
     }
 
+    if (user.profileImage) {
+      deleteOldImage(user.profileImage);
+    }
+    
     return NextResponse.json({
       success: true,
       url: imageRes.url, // URL for frontend

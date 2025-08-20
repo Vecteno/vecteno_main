@@ -44,6 +44,8 @@ export default function ProfileSettings() {
     const data = new FormData();
     data.append("image", image);
     data.append("type", "profileImages");
+    data.append("userId", user.id); // send userId
+    data.append("oldImage", user.profileImage); // send old image path
 
     const res = await fetch("/api/upload-profile", {
       method: "POST",
