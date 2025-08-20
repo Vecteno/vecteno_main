@@ -348,7 +348,7 @@ const HomePage = () => {
         <button
           key={idx}
           onClick={() => handleTabClick(tab.label)}
-          className={`flex items-center space-x-2 px-6 py-3 rounded bg-blue-400 hover:bg-blue-700 transition h-20 
+          className={`flex items-center space-x-2 px-6 py-3 rounded bg-blue-400 hover:bg-blue-700 transition h-20 cursor-pointer
             ${idx >= 3 ? "hidden md:flex" : ""}`}
         >
           {tab.icon}
