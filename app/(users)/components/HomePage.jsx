@@ -241,13 +241,7 @@ const HomePage = () => {
             onMouseLeave={() => setShowDropdown(false)}
           >
             {/* Dropdown Button */}
-            <button
-              className="flex items-center justify-between w-full md:w-52 px-4 py-2.5 
-      bg-gradient-to-r from-blue-500 to-blue-600 text-white 
-      font-medium rounded-3xl shadow-md hover:shadow-lg 
-      hover:from-blue-600 hover:to-blue-700 
-      transition-all duration-200"
-            >
+            <button className="flex items-center justify-between w-full md:w-52 px-4 py-2.5  text-black font-medium rounded-3xl shadow-md hover:shadow-lg  transition-all duration-200">
               {selectedCategory}
               <IoIosArrowDown
                 className={`ml-2 transform transition-transform duration-200 ${
@@ -258,33 +252,23 @@ const HomePage = () => {
 
             {/* Dropdown Menu */}
             {showDropdown && (
-              <div
-                className="absolute top-full left-0 mt-0 bg-white border border-gray-200 
-        rounded-xl shadow-xl z-50  backdrop-blur-sm p-2 flex gap-4"
-              >
-                {Array.from(
-                  { length: Math.ceil(dropdownCategories.length / 6) },
-                  (_, colIndex) => (
-                    <ul key={colIndex} className="w-35">
-                      {dropdownCategories
-                        .slice(colIndex * 6, colIndex * 6 + 6)
-                        .map((cat, idx) => (
-                          <li
-                            key={idx}
-                            onClick={() => {
-                              setSelectedCategory(cat);
-                              setShowDropdown(false); // 🔥 close on click
-                            }}
-                            className="px-4 py-2.5 text-sm text-gray-700 
-                    hover:bg-blue-50 hover:text-blue-600 
-                    cursor-pointer transition-colors duration-150"
-                          >
-                            {cat}
-                          </li>
-                        ))}
-                    </ul>
-                  )
-                )}
+              <div className="absolute top-full left-0 mt-0 bg-white border border-gray-200 rounded-xl shadow-xl z-50 backdrop-blur-sm p-2 w-48 max-h-60 overflow-y-auto">
+                <ul>
+                  {dropdownCategories.map((cat, idx) => (
+                    <li
+                      key={idx}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setShowDropdown(false); // 🔥 close on click
+                      }}
+                      className="px-4 py-2.5 text-sm text-gray-700 
+          hover:bg-blue-500 hover:text-white
+          cursor-pointer transition-colors duration-150"
+                    >
+                      {cat}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>

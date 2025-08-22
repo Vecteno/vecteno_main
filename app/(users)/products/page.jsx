@@ -421,17 +421,17 @@ export default function ImageGallery() {
         </div>
       ) : (
         <>
-          <div className="columns-2 sm:columns-3 md:columns-4 gap-4 space-y-4 px-2">
+          <div className="columns-2 sm:columns-3 md:columns-4 gap-4 space-y-4 px-2 mx-10 my-10">
             {(images || []).map((img) => (
               <div
                 key={img._id}
-                className="relative w-full h-[50%] break-inside-avoid overflow-hidden rounded-lg shadow hover:shadow-xl transition"
+                className="relative w-full h-[50%] break-inside-avoid overflow-hidden  shadow hover:shadow-xl transition"
               >
                 <Link href={`/${img.category?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '')}/${img.slug}`}>
                   <img
                     src={`${img.thumbnailUrl || img.imageUrl || "/img111.jpg"}?v=${Date.now()}`}
                     alt={img.title}
-                    className="w-full rounded-lg hover:opacity-90 transition-all duration-300"
+                    className="w-full hover:opacity-90 transition-all duration-300"
                     onError={(e) => {
                       console.log('Products page image failed to load:', e.target.src);
                       // Try fallback to main image if thumbnail fails

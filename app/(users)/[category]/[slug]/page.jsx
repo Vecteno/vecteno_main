@@ -279,7 +279,7 @@ export default function ProductDetailPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f4f8fc]">
+    <div className="min-h-screen bg-blue-100">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
