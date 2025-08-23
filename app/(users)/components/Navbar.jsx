@@ -257,13 +257,13 @@ const Navbar = () => {
               <ul
                 className="absolute left-0 mt-3 bg-white border border-gray-200 rounded-xl shadow-xl 
     opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 
-    z-50 backdrop-blur-sm p-2 w-52 max-h-[400px] overflow-y-auto"
+    z-50 backdrop-blur-sm p-2 w-40 max-h-[350px] overflow-y-auto"
               >
                 {categories.map((cat, idx) => (
                   <li key={idx}>
                     <Link
                       href={`/${cat.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap"
+                      className="block px-4 py-2 hover:bg-blue-700 hover:text-white text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap"
                     >
                       {cat}
                     </Link>
