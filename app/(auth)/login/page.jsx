@@ -4,7 +4,15 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
-import { Eye, EyeOff, LogIn, CheckCircle, Mail, Lock, Home } from "lucide-react"; // Lucide icons
+import {
+  Eye,
+  EyeOff,
+  LogIn,
+  CheckCircle,
+  Mail,
+  Lock,
+  Home,
+} from "lucide-react"; // Lucide icons
 import { FcGoogle } from "react-icons/fc"; // Google icon
 
 const Login = () => {
@@ -47,7 +55,7 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    
+
     try {
       const response = await axios.post("/api/login", { email, password });
       if (response.data.message === "Login Successful") {
@@ -88,7 +96,7 @@ const Login = () => {
           <div className="absolute top-1/2 left-10 w-16 h-16 border border-white/10 rotate-45 rounded-xl"></div>
           <div className="absolute bottom-20 left-1/3 w-8 h-8 bg-white/10 rotate-45 rounded"></div>
         </div>
-        
+
         {/* Content */}
         <div className="relative z-10 text-center text-white px-12 max-w-md">
           {/* Logo/Icon */}
@@ -96,20 +104,20 @@ const Login = () => {
             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6">
               <div className="text-blue-600 text-2xl font-bold">V</div>
             </div>
-            <Link href="/" className="text-white/80 hover:text-white transition-colors text-sm font-medium">
+            <Link
+              href="/"
+              className="text-white/80 hover:text-white transition-colors text-sm font-medium"
+            >
               ← Back to Home
             </Link>
           </div>
-          
-          <h1 className="text-4xl font-bold mb-4">
-            Hello Vecteno! 👋
-          </h1>
-          
+
+          <h1 className="text-4xl font-bold mb-4">Hello Vecteno! 👋</h1>
+
           <p className="text-lg text-white/90 leading-relaxed">
-            Access your creative dashboard and manage your digital assets with ease. Get productive through our powerful tools!
+            Access your creative dashboard and manage your digital assets with
+            ease. Get productive through our powerful tools!
           </p>
-          
-     
         </div>
       </div>
 
@@ -120,7 +128,9 @@ const Login = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Vecteno</h2>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">Welcome Back!</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                Welcome Back!
+              </h1>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -164,7 +174,7 @@ const Login = () => {
                   </div>
                 </div>
               )}
-              
+
               {error && <p className="text-red-500 mb-4 text-sm">{error}</p>}
 
               {/* Login Button */}
@@ -179,18 +189,20 @@ const Login = () => {
                     Logging in...
                   </div>
                 ) : (
-                  'Login Now'
+                  "Login Now"
                 )}
               </button>
 
               {/* Google Sign In */}
               <button
                 type="button"
-              disabled={isLoading}
-              className="border border-gray-300 p-2 w-full rounded-full flex items-center justify-center gap-2 mb-6 hover:bg-gray-100 transition"
-              onClick={() =>
-                signIn("google", { callbackUrl: "/user/dashboard" })
-              }
+                disabled={isLoading}
+                className="border border-gray-300 p-2 w-full rounded-full flex items-center justify-center gap-2 mb-6 hover:bg-gray-100 transition"
+                onClick={() =>
+                  signIn("google", {
+                    callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/user/dashboard`,
+                  })
+                }
               >
                 <FcGoogle size={20} />
                 Login with Google
@@ -199,8 +211,8 @@ const Login = () => {
               {/* Forgot Password */}
               <div className="text-center mb-4">
                 <span className="text-gray-500 text-sm">Forget password </span>
-                <Link 
-                  href="/resetProfile" 
+                <Link
+                  href="/resetProfile"
                   className="text-gray-900 font-semibold text-sm hover:underline"
                 >
                   Click here
@@ -209,9 +221,11 @@ const Login = () => {
 
               {/* Sign Up Link */}
               <div className="text-center">
-                <span className="text-gray-500 text-sm">Don't have an account? </span>
-                <Link 
-                  href="/signup" 
+                <span className="text-gray-500 text-sm">
+                  Don't have an account?{" "}
+                </span>
+                <Link
+                  href="/signup"
                   className="text-blue-600 font-semibold text-sm hover:underline"
                 >
                   Create a new account now
