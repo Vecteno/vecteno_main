@@ -198,11 +198,12 @@ const Login = () => {
                 type="button"
                 disabled={isLoading}
                 className="border border-gray-300 p-2 w-full rounded-full flex items-center justify-center gap-2 mb-6 hover:bg-gray-100 transition"
-                onClick={() =>
+                onClick={() => {
+                  console.log('Google signIn button clicked');
                   signIn("google", {
                     callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/user/dashboard`,
-                  })
-                }
+                  });
+                }}
               >
                 <FcGoogle size={20} />
                 Login with Google
