@@ -300,7 +300,7 @@ export default function ImageGallery() {
               </button>
 
               {showCategoryDropdown && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 min-w-[200px] max-h-[300px] overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 min-w-[200px] max-h-[230px] overflow-y-auto">
                   {categories.map((category) => (
                     <button
                       key={category}
