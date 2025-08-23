@@ -1,11 +1,14 @@
+/* Google Fonts MUST be first */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@100..900&display=swap');
+
+/* Tailwind imports */
 @import "tailwindcss";
 @import "tw-animate-css";
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
 
-/* styles/globals.css */
+/* Custom styles */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #4b5563 transparent; /* thumb and track colors */
+  scrollbar-color: #4b5563 transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -17,10 +20,9 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #4b5563; /* Tailwind gray-700 */
+  background-color: #4b5563;
   border-radius: 9999px;
 }
-
 
 @custom-variant dark (&:is(.dark *));
 
@@ -136,22 +138,24 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: 'DM Sans', sans-serif;
   }
   body {
     @apply bg-background text-foreground;
   }
 }
 
+/* Utility classes for fonts */
+.font-dmsans {
+  font-family: 'DM Sans', sans-serif !important;
+}
+.font-outfit {
+  font-family: 'Outfit', sans-serif !important;
+}
+
+/* Hide scrollbar */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-*{
-  font-family: Outfit;
-}
-
-.font-playfair{
-  font-family: Playfair !important;
 }
 
 /* YouTube-style shimmer effect */
@@ -170,11 +174,10 @@
   background-size: 200% 100%;
 }
 
-
 /* Hide scrollbar for Chrome, Safari and Opera */
 .sidebar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 .sidebar::-webkit-scrollbar {
   display: none;
