@@ -19,9 +19,6 @@ export const authOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/login",
-  },
   cookies: {
     sessionToken: {
       name: `${isProd ? "__Secure-" : ""}next-auth.session-token`,
