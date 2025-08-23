@@ -255,8 +255,9 @@ const Navbar = () => {
               </button>
 
               <ul
-                className="absolute left-0 mt-3 bg-white border border-gray-200 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50 backdrop-blur-sm
-    grid grid-flow-col grid-rows-6 gap-x-6 p-2 max-h-[400px] overflow-y-auto auto-cols-max"
+                className="absolute left-0 mt-3 bg-white border border-gray-200 rounded-xl shadow-xl 
+    opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 
+    z-50 backdrop-blur-sm p-2 w-52 max-h-[400px] overflow-y-auto"
               >
                 {categories.map((cat, idx) => (
                   <li key={idx}>
