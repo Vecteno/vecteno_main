@@ -263,7 +263,7 @@ const Navbar = () => {
                   <li key={idx}>
                     <Link
                       href={`/${cat.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="block px-4 py-2 hover:bg-blue-700 hover:text-white text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap"
+                      className="block px-4 py-2 hover:bg-blue-600 hover:text-white text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap"
                     >
                       {cat}
                     </Link>
