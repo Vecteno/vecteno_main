@@ -8,37 +8,41 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import userModel from "@/app/models/userModel";
 import Transaction from "@/app/models/transactionModel";
+import License from "@/app/models/License";
 
 export async function GET(request, { params }) {
-  // Debug: log cookies and session
   try {
-    const cookieHeader = request.headers.get('cookie');
-    console.log('Cookie header:', cookieHeader);
+    const cookieHeader = request.headers.get("cookie");
+    console.log("Cookie header:", cookieHeader);
   } catch (err) {
-    console.log('Error reading cookie header:', err);
+    console.log("Error reading cookie header:", err);
   }
+
   let session = await getServerSession(authOptions);
-  console.log('Session:', session);
-  // Fallback: decode custom JWT from 'token' cookie if session is null
+  console.log("Session:", session);
+
+  // 🔹 Custom JWT fallback
   if (!session?.user) {
     try {
-      const cookieHeader = request.headers.get('cookie') || '';
+      const cookieHeader = request.headers.get("cookie") || "";
       const tokenMatch = cookieHeader.match(/token=([^;]+)/);
       if (tokenMatch) {
         const jwtToken = tokenMatch[1];
-        // Use your verifyJWT utility from your NextAuth config
-        const { verifyJWT } = await import('@/lib/jwt');
+        const { verifyJWT } = await import("@/lib/jwt");
         const decoded = await verifyJWT(jwtToken);
         if (decoded && decoded.id) {
           session = { user: { id: decoded.id, role: decoded.role } };
         }
       }
     } catch (err) {
-      console.log('Custom JWT fallback error:', err);
+      console.log("Custom JWT fallback error:", err);
     }
   }
+
   if (!session?.user) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+    });
   }
 
   const { slug } = params;
@@ -46,10 +50,12 @@ export async function GET(request, { params }) {
 
   const image = await ImageModel.findOne({ slug });
   if (!image) {
-    return new Response(JSON.stringify({ error: "Image not found" }), { status: 404 });
+    return new Response(JSON.stringify({ error: "Image not found" }), {
+      status: 404,
+    });
   }
 
-  // 🔹 If image is premium, verify user subscription
+  // 🔹 Premium check
   if (image.type === "premium") {
     const user = await userModel.findById(session.user.id);
     const now = new Date();
@@ -59,15 +65,20 @@ export async function GET(request, { params }) {
     });
 
     if (activeTransactions.length === 0) {
-      return new Response(JSON.stringify({ error: "Premium access required" }), {
-        status: 403,
-      });
+      return new Response(
+        JSON.stringify({ error: "Premium access required" }),
+        {
+          status: 403,
+        }
+      );
     }
   }
 
   const downloadUrl = image.downloadUrl || image.imageUrl;
   if (!downloadUrl) {
-    return new Response(JSON.stringify({ error: "Download URL missing" }), { status: 404 });
+    return new Response(JSON.stringify({ error: "Download URL missing" }), {
+      status: 404,
+    });
   }
 
   try {
@@ -76,9 +87,12 @@ export async function GET(request, { params }) {
     if (/^https?:\/\//i.test(downloadUrl)) {
       const res = await fetch(downloadUrl);
       if (!res.ok) {
-        return new Response(JSON.stringify({ error: "Failed to fetch remote file" }), {
-          status: 502,
-        });
+        return new Response(
+          JSON.stringify({ error: "Failed to fetch remote file" }),
+          {
+            status: 502,
+          }
+        );
       }
       fileBuffer = Buffer.from(await res.arrayBuffer());
     } else {
@@ -106,21 +120,19 @@ export async function GET(request, { params }) {
 
     zip.file(fileName, fileBuffer);
 
-    zip.file(
-      "LICENSE.txt",
+    // 🔹 Fetch license from DB (latest saved one)
+    const licenseDoc = await License.findOne().sort({ updatedAt: -1 });
+    const licenseText =
+      licenseDoc?.text ||
       `LICENSE AGREEMENT
 
 Copyright © ${new Date().getFullYear()} Vecteno.com. All rights reserved.
 
-Permission is granted to use this asset in personal and commercial projects,
-subject to the following conditions:
+Default license: You may use this asset in personal and commercial projects,
+but redistribution or resale is prohibited.`;
 
-1. You may use and modify the asset.
-2. You may include the asset in derivative works.
-3. You may NOT resell or redistribute the asset in its original form.
-4. You may NOT claim ownership of the original asset.
-`
-    );
+    // Add LICENSE.txt
+    zip.file("LICENSE.txt", licenseText);
 
     const zipContent = await zip.generateAsync({ type: "uint8array" });
 

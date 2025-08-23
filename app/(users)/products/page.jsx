@@ -288,7 +288,7 @@ export default function ImageGallery() {
         <div className="bg-white border border-gray-200 shadow-lg rounded-full p-2">
           <form onSubmit={handleSearch} className="flex items-center">
             {/* Left Section - Category Dropdown (Hidden on Mobile) */}
-            {" "}
+            {" "} 
             <div
               className="relative flex items-center hidden md:flex"
               ref={categoryDropdownRef}
