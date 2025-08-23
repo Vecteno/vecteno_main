@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { FaCrown } from "react-icons/fa";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 import { FiSmartphone, FiMonitor, FiSquare } from "react-icons/fi";
 
@@ -185,6 +185,56 @@ export default function ImageGallery() {
     setShowOrientationDropdown(dropdownType === 'orientation');
     setShowFileTypeDropdown(dropdownType === 'fileType');
     setShowCategoryDropdown(dropdownType === 'category');
+  };
+
+  // Generate pagination numbers
+  const getPaginationNumbers = () => {
+    const numbers = [];
+    const maxVisiblePages = 9; // As shown in your screenshot
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total pages is less than max visible
+      for (let i = 1; i <= totalPages; i++) {
+        numbers.push(i);
+      }
+    } else {
+      // Always show first page
+      numbers.push(1);
+      
+      // Calculate start and end of visible page range
+      let startPage = Math.max(2, page - 3);
+      let endPage = Math.min(totalPages - 1, page + 3);
+      
+      // Adjust if we're near the beginning
+      if (page <= 4) {
+        endPage = 6;
+      }
+      
+      // Adjust if we're near the end
+      if (page >= totalPages - 3) {
+        startPage = totalPages - 5;
+      }
+      
+      // Add ellipsis after first page if needed
+      if (startPage > 2) {
+        numbers.push('...');
+      }
+      
+      // Add page numbers in range
+      for (let i = startPage; i <= endPage; i++) {
+        numbers.push(i);
+      }
+      
+      // Add ellipsis before last page if needed
+      if (endPage < totalPages - 1) {
+        numbers.push('...');
+      }
+      
+      // Always show last page
+      numbers.push(totalPages);
+    }
+    
+    return numbers;
   };
 
   return (
@@ -459,33 +509,43 @@ export default function ImageGallery() {
             </div>
           )}
 
-          {/* Pagination Controls - Only show if not filtering */}
-          {searchQuery === "" && orientation.length === 0 && fileType.length === 0 && license === "all" && selectedCategory === "All Creatives" && (
-            <div className="flex justify-center gap-4 mt-8">
+          {/* NEW: Numbered Pagination (like your screenshot) */}
+          {searchQuery === "" && orientation.length === 0 && fileType.length === 0 && license === "all" && selectedCategory === "All Creatives" && totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-12 mb-8 px-4">
+              {/* Previous Button */}
               <button
-                disabled={page <= 1}
                 onClick={() => setPage(page - 1)}
-                className={`px-4 py-2 rounded ${
-                  page <= 1
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-gray-200 hover:bg-gray-300"
-                }`}
+                disabled={page <= 1}
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                <IoIosArrowBack className="text-gray-600" />
               </button>
 
-              <span className="px-4 py-2">{`Page ${page} of ${totalPages}`}</span>
+              {/* Page Numbers */}
+              <div className="flex items-center gap-1">
+                {getPaginationNumbers().map((pageNumber, index) => (
+                  <button
+                    key={index}
+                    onClick={() => typeof pageNumber === 'number' && setPage(pageNumber)}
+                    disabled={pageNumber === '...'}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200 ${
+                      page === pageNumber
+                        ? 'bg-blue-600 border-blue-600 text-white shadow-md'
+                        : 'border-gray-300 hover:bg-gray-100 text-gray-700'
+                    } ${pageNumber === '...' ? 'cursor-default hover:bg-transparent' : 'cursor-pointer'}`}
+                  >
+                    {pageNumber === '...' ? '...' : pageNumber}
+                  </button>
+                ))}
+              </div>
 
+              {/* Next Button */}
               <button
-                disabled={page >= totalPages}
                 onClick={() => setPage(page + 1)}
-                className={`px-4 py-2 rounded ${
-                  page >= totalPages
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-gray-200 hover:bg-gray-300"
-                }`}
+                disabled={page >= totalPages}
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                <IoIosArrowForward className="text-gray-600" />
               </button>
             </div>
           )}

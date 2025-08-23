@@ -1,3 +1,6 @@
+
+
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -143,7 +146,7 @@ const DownloadSection = ({ image }) => {
       {/* Copyright Notice */}
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
         <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-          This image is protected by copyright. For commercial use and license authorization, please Upgrade to Individual Premium plan
+           This image is protected by copyright. For commercial use and license authorization, please Upgrade to Individual Premium plan
         </p>
       </div>
 
