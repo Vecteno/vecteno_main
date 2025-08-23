@@ -203,25 +203,25 @@ export default function ImageGallery() {
   const toggleDropdown = (dropdownType) => {
     switch (dropdownType) {
       case "license":
-        setShowLicenseDropdown(prev => !prev);
+        setShowLicenseDropdown((prev) => !prev);
         setShowOrientationDropdown(false);
         setShowFileTypeDropdown(false);
         setShowCategoryDropdown(false);
         break;
       case "orientation":
-        setShowOrientationDropdown(prev => !prev);
+        setShowOrientationDropdown((prev) => !prev);
         setShowLicenseDropdown(false);
         setShowFileTypeDropdown(false);
         setShowCategoryDropdown(false);
         break;
       case "fileType":
-        setShowFileTypeDropdown(prev => !prev);
+        setShowFileTypeDropdown((prev) => !prev);
         setShowLicenseDropdown(false);
         setShowOrientationDropdown(false);
         setShowCategoryDropdown(false);
         break;
       case "category":
-        setShowCategoryDropdown(prev => !prev);
+        setShowCategoryDropdown((prev) => !prev);
         setShowLicenseDropdown(false);
         setShowOrientationDropdown(false);
         setShowFileTypeDropdown(false);
@@ -288,13 +288,14 @@ export default function ImageGallery() {
         <div className="bg-white border border-gray-200 shadow-lg rounded-full p-2">
           <form onSubmit={handleSearch} className="flex items-center">
             {/* Left Section - Category Dropdown (Hidden on Mobile) */}
+            {" "}
             <div
-              className="relative flex items-center  md:hidden"
+              className="relative flex items-center hidden md:flex"
               ref={categoryDropdownRef}
             >
               <button
                 type="button"
-                onClick={() => toggleDropdown("category")}
+                onClick={() => setShowCategoryDropdown((prev) => !prev)} // toggle open/close
                 className="flex items-center gap-2 px-4 py-3 text-blue-600 font-medium hover:bg-gray-50 rounded-l-full transition-colors"
               >
                 {selectedCategory}
@@ -306,7 +307,7 @@ export default function ImageGallery() {
               </button>
 
               {showCategoryDropdown && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 min-w-[200px] max-h-[300px] overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 min-w-[200px] max-h-[230px] overflow-y-auto">
                   {categories.map((category) => (
                     <button
                       key={category}
@@ -326,7 +327,6 @@ export default function ImageGallery() {
               {/* Vertical separator line */}
               <div className="w-px h-8 bg-gray-300 mx-2"></div>
             </div>
-
             {/* Middle Section - Search Input */}
             <div className="flex-1">
               <input
@@ -337,7 +337,6 @@ export default function ImageGallery() {
                 className="w-full outline-none text-sm px-4 py-3 text-gray-700 placeholder-gray-400 md:pl-0 pl-4"
               />
             </div>
-
             {/* Right Section - Search Button */}
             <button
               type="submit"

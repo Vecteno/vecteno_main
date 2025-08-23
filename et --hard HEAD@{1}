@@ -1,0 +1,50 @@
+[33mcc88d75[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull: Fast-forward
+[33m8f7ecda[m HEAD@{1}: commit: product page search category UI
+[33m7e3bd82[m HEAD@{2}: commit: product page search category UI
+[33m3981b0a[m HEAD@{3}: commit: navbar category
+[33m73532ca[m HEAD@{4}: commit: navbar category
+[33ma663780[m HEAD@{5}: pull: Fast-forward
+[33mbfcacbd[m HEAD@{6}: pull: Fast-forward
+[33mac2a85c[m HEAD@{7}: commit: navbar category
+[33ma7cb6a7[m HEAD@{8}: commit: navbar category
+[33m41f7628[m HEAD@{9}: pull: Fast-forward
+[33mbfc7ddf[m HEAD@{10}: commit: navbar category
+[33m13d5e26[m HEAD@{11}: pull: Fast-forward
+[33m4bf1acf[m HEAD@{12}: commit: changed styling
+[33m7798720[m HEAD@{13}: commit: category location
+[33mfe55e57[m HEAD@{14}: commit: category location
+[33md624772[m HEAD@{15}: commit: category location
+[33m62a834a[m HEAD@{16}: pull: Fast-forward
+[33m3663955[m HEAD@{17}: commit: securing DB Url
+[33m2a5773c[m HEAD@{18}: commit: MongoDB
+[33m69ff4c7[m HEAD@{19}: commit: UI
+[33m22464c5[m HEAD@{20}: commit: profile image deleting
+[33m6340b04[m HEAD@{21}: commit: delete stored pro image
+[33mf899327[m HEAD@{22}: commit: profile image
+[33mb98fd07[m HEAD@{23}: commit: profile Image uploading
+[33mcfbace4[m HEAD@{24}: commit: profile Image uploading
+[33mb5095f0[m HEAD@{25}: commit: profile Image uploading
+[33m59aa0b6[m HEAD@{26}: commit: profile Image uploading
+[33m409efb5[m HEAD@{27}: commit: profile image
+[33m2ece973[m HEAD@{28}: pull: Merge made by the 'ort' strategy.
+[33m2580432[m HEAD@{29}: commit: :)
+[33m4a24ffa[m HEAD@{30}: commit: downloading
+[33m813268a[m HEAD@{31}: commit: downloading
+[33md750a96[m HEAD@{32}: commit: downloading
+[33mcda4223[m HEAD@{33}: commit: downloading
+[33mbf971a3[m HEAD@{34}: commit: restarting downloading
+[33m7d93b6c[m HEAD@{35}: commit: updating downloading
+[33m3520822[m HEAD@{36}: commit: logged in user download backend
+[33me459596[m HEAD@{37}: commit: logged in user download
+[33mea30ae9[m HEAD@{38}: pull: Fast-forward
+[33mcd8b2bd[m HEAD@{39}: pull: Fast-forward
+[33mcfb5024[m HEAD@{40}: commit: Logout changes
+[33m74e4e15[m HEAD@{41}: commit: Logout changes
+[33m85aa797[m HEAD@{42}: commit: Logout changes
+[33m3a48dbd[m HEAD@{43}: commit: changed nextAuth
+[33m5d6cdd8[m HEAD@{44}: commit: changed nextAuth
+[33mc39c0e8[m HEAD@{45}: commit: changed nextAuth
+[33m0582f58[m HEAD@{46}: commit: changed nextAuth
+[33m3282402[m HEAD@{47}: commit: deleting from storage
+[33m08f93c5[m HEAD@{48}: commit: Readme
+[33mce24a66[m HEAD@{49}: clone: from https://github.com/Vecteno/vecteno_main.git
