@@ -10,9 +10,9 @@ import { cookies } from "next/headers";
 
 const isProd = process.env.NODE_ENV === "production";
 const usingIP = process.env.NEXTAUTH_URL?.includes("://31."); // crude check for IP usage
+console.log("authOptions.providers:", authOptions.providers)
 
-export const authOptions = {
-console.log("authOptions.providers:", authOptions.providers);
+export const authOptions = { 
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
