@@ -12,6 +12,7 @@ const isProd = process.env.NODE_ENV === "production";
 const usingIP = process.env.NEXTAUTH_URL?.includes("://31."); // crude check for IP usage
 
 export const authOptions = {
+console.log("authOptions.providers:", authOptions.providers);
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -143,3 +144,4 @@ export const authOptions = {
     strategy: "jwt",
   },
 };
+console.log("authOptions.providers:", authOptions.providers);
