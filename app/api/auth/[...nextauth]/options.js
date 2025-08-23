@@ -26,7 +26,8 @@ export const authOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: false, // Always false for easier local development
+        secure: false, // ✅ since you're on http
+        domain: ".test.godofgraphic.com", // ✅ force cookies to your test domain
       },
     },
     callbackUrl: {
@@ -125,7 +126,9 @@ export const authOptions = {
             image: token.picture,
             role: token.role || "user",
           },
-          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          expires: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000
+          ).toISOString(),
         };
       } else if (session?.user) {
         session.user.id = token.id;
