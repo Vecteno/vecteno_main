@@ -123,7 +123,7 @@ export async function GET(request, { params }) {
     // 🔹 Fetch license from DB (latest saved one)
     const licenseDoc = await License.findOne().sort({ updatedAt: -1 });
     const licenseText =
-      licenseDoc?.text ||
+      licenseDoc?.licenseText ||
       `LICENSE AGREEMENT
 
 Copyright © ${new Date().getFullYear()} Vecteno.com. All rights reserved.
