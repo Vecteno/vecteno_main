@@ -9,7 +9,7 @@ export async function middleware(request) {
   const publicRoutes = [
     "/", "/login", "/signup", "/resetProfile", "/unauthorized",
     "/admin/login", "/admin/forgot-password",
-    "/api/auth", "/api/adminLogin", "/api/admin/send-login-otp",
+    "/api/auth", "/api/auth/", "/api/auth/signin", "/api/auth/signin/google", "/api/auth/callback", "/api/auth/callback/google", "/api/auth/session", "/api/auth/providers", "/api/auth/csrf", "/api/auth/error", "/api/auth/_log", "/api/adminLogin", "/api/admin/send-login-otp",
     "/api/admin/verify-login-otp", "/api/admin/send-reset-otp",
     "/api/admin/verify-reset-otp", "/api/admin/reset-password",
     "/api/reset-admin", "/api/debug-token", "/api/fix-admin-password",
