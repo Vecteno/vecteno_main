@@ -43,6 +43,7 @@ export default function AdminDashboard() {
     const fetchStats = async () => {
       const res = await fetch("/api/admin/stats");
       const data = await res.json();
+      console.log("Stats data:", data);
 
       if (res.ok) {
         const combined = monthNames.map((name, idx) => ({
