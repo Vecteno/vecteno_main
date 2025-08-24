@@ -21,6 +21,7 @@ import {
 } from "react-icons/fi";
 
 export default function AdminSettingsPage() {
+  const [showSecret, setShowSecret] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -30,6 +31,8 @@ export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
   const [licenseText, setLicenseText] = useState("");
   const [editingLicense, setEditingLicense] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  
 
   // SMTP Configuration states
   const [smtpConfig, setSmtpConfig] = useState({
@@ -1118,26 +1121,40 @@ export default function AdminSettingsPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    App Password
-                  </label>
-                  <input
-                    type="password"
-                    value={smtpConfig.password}
-                    onChange={(e) =>
-                      setSmtpConfig((prev) => ({
-                        ...prev,
-                        password: e.target.value,
-                      }))
-                    }
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Your Gmail App Password"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    For Gmail, use an App Password, not your regular password
-                  </p>
-                </div>
+                 <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        App Password
+      </label>
+
+      {/* Wrap input + eye button inside a relative container */}
+      <div className="relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          value={smtpConfig.password}
+          onChange={(e) =>
+            setSmtpConfig((prev) => ({
+              ...prev,
+              password: e.target.value,
+            }))
+          }
+          className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Your Gmail App Password"
+        />
+
+        {/* Eye Icon Button */}
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer"
+        >
+          {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+        </button>
+      </div>
+
+      <p className="text-sm text-gray-500 mt-1">
+        For Gmail, use an App Password, not your regular password
+      </p>
+    </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1240,26 +1257,39 @@ export default function AdminSettingsPage() {
                   </p>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Razorpay Key Secret
-                  </label>
-                  <input
-                    type="password"
-                    value={razorpayConfig.keySecret}
-                    onChange={(e) =>
-                      setRazorpayConfig((prev) => ({
-                        ...prev,
-                        keySecret: e.target.value,
-                      }))
-                    }
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Your Secret Key"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Keep this secret and secure
-                  </p>
-                </div>
+      <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Razorpay Key Secret
+      </label>
+
+      <div className="relative">
+        <input
+          type={showSecret ? "text" : "password"}
+          value={razorpayConfig.keySecret}
+          onChange={(e) =>
+            setRazorpayConfig((prev) => ({
+              ...prev,
+              keySecret: e.target.value,
+            }))
+          }
+          className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Your Secret Key"
+        />
+
+        {/* Eye toggle button */}
+        <button
+          type="button"
+          onClick={() => setShowSecret((prev) => !prev)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer"
+        >
+          {showSecret ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+        </button>
+      </div>
+
+      <p className="text-sm text-gray-500 mt-1">
+        Keep this secret and secure
+      </p>
+    </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
