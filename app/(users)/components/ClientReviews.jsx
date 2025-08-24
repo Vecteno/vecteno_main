@@ -101,11 +101,12 @@ const ClientReviews = () => {
     <section className="py-16 px-4 bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-6xl mx-auto text-center">
         <div className="mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent mb-4">
             What Our Creators Say
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Join thousands of satisfied designers and creators who trust Vecteno for their creative needs
+            Join the community of satisfied designers and creators who trust
+            Vecteno for their creative needs
           </p>
         </div>
 
@@ -114,25 +115,35 @@ const ClientReviews = () => {
           <div className="overflow-hidden">
             <div
               className="flex transition-transform duration-500 ease-in-out"
-              style={{ 
-                transform: `translateX(-${currentSlide * (isMobile ? 100 : 33.333)}%)` 
+              style={{
+                transform: `translateX(-${
+                  currentSlide * (isMobile ? 100 : 33.333)
+                }%)`,
               }}
             >
               {reviews.map((review, index) => (
-                <div key={index} className={`flex-shrink-0 px-2 md:px-4 ${isMobile ? 'w-full' : 'w-1/3'}`}>
+                <div
+                  key={index}
+                  className={`flex-shrink-0 px-2 md:px-4 ${
+                    isMobile ? "w-full" : "w-1/3"
+                  }`}
+                >
                   <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mx-2 transform hover:scale-105 transition-all duration-300 h-full">
                     {/* Stars */}
                     <div className="flex justify-center mb-4">
                       {[...Array(review.rating)].map((_, i) => (
-                        <FaStar key={i} className="text-yellow-400 text-lg mx-1" />
+                        <FaStar
+                          key={i}
+                          className="text-yellow-400 text-lg mx-1"
+                        />
                       ))}
                     </div>
-                    
+
                     {/* Review Text */}
                     <blockquote className="text-base md:text-lg text-gray-700 leading-relaxed mb-6 italic min-h-[120px] flex items-center">
                       "{review.review}"
                     </blockquote>
-                    
+
                     {/* Author Info */}
                     <div className="flex items-center justify-center">
                       <img
@@ -141,8 +152,12 @@ const ClientReviews = () => {
                         className="w-12 h-12 md:w-14 md:h-14 rounded-full border-4 border-blue-200 mr-3 shadow-md"
                       />
                       <div className="text-left">
-                        <h4 className="text-lg md:text-xl font-bold text-gray-800">{review.name}</h4>
-                        <p className="text-blue-600 font-medium text-sm md:text-base">{review.role}</p>
+                        <h4 className="text-lg md:text-xl font-bold text-gray-800">
+                          {review.name}
+                        </h4>
+                        <p className="text-blue-600 font-medium text-sm md:text-base">
+                          {review.role}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -184,19 +199,27 @@ const ClientReviews = () => {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-12 border-t border-gray-200">
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">2K+</div>
+            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+              2K+
+            </div>
             <div className="text-gray-600 font-medium">Happy Users</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-2">50K+</div>
+            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+              50K+
+            </div>
             <div className="text-gray-600 font-medium">Downloads</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">4.5</div>
-            <div className="text-gray-600 font-medium">Average Rating</div> 
+            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+              4.5
+            </div>
+            <div className="text-gray-600 font-medium">Average Rating</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-2">24/7</div>
+            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+              24/7
+            </div>
             <div className="text-gray-600 font-medium">Support</div>
           </div>
         </div>

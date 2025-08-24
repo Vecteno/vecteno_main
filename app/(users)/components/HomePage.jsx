@@ -231,7 +231,7 @@ const HomePage = () => {
 
         {/* Search bar */}
         <div
-          className="flex flex-col md:flex-row justify-center items-center max-w-5xl mx-auto w-full bg-white rounded-2xl md:rounded-full p-2 z-10"
+          className="flex flex-col md:flex-row justify-center items-center max-w-5xl mx-auto w-full md:rounded-full z-10 bg-white border border-gray-200 shadow-lg rounded-full p-2"
           ref={searchRef}
         >
           {/* Dropdown - Hidden on Mobile */}
@@ -241,7 +241,10 @@ const HomePage = () => {
             onMouseLeave={() => setShowDropdown(false)}
           >
             {/* Dropdown Button */}
-            <button className="flex items-center justify-between w-full md:w-52 px-4 py-2.5  text-black font-medium rounded-3xl shadow-md hover:shadow-lg  transition-all duration-200">
+            <button
+              className="justify-between w-full md:w-52 rounded-3xl hover:shadow-md duration-200
+            flex items-center gap-2 px-4 py-3 text-blue-600 font-medium hover:bg-gray-50 rounded-l-full transition-colors"
+            >
               {selectedCategory}
               <IoIosArrowDown
                 className={`ml-2 transform transition-transform duration-200 ${
@@ -252,7 +255,7 @@ const HomePage = () => {
 
             {/* Dropdown Menu */}
             {showDropdown && (
-              <div className="absolute top-full left-0 mt-0 bg-white border border-gray-200 rounded-xl shadow-xl z-50 backdrop-blur-sm p-2 w-48 max-h-60 overflow-y-auto">
+              <div className="absolute top-full left-0 mt-0 bg-white border border-gray-200 rounded-xl shadow-xl z-50 backdrop-blur-sm w-48 max-h-60 overflow-y-auto">
                 <ul>
                   {dropdownCategories.map((cat, idx) => (
                     <li
@@ -272,6 +275,7 @@ const HomePage = () => {
               </div>
             )}
           </div>
+          <div className="w-px h-8 bg-gray-300 mx-2 hidden md:block"></div>
 
           {/* Search input with AJAX */}
           <div className="relative flex items-center w-full">
@@ -281,14 +285,17 @@ const HomePage = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for graphics..."
-                className="flex-1 outline-none text-sm border border-gray-300 rounded-full px-4 py-2 shadow-sm text-black"
+                className="flex-1 outline-none text-md rounded-full px-4 py-2 text-black"
               />
-              <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-2 rounded-full w-12 h-12 flex justify-center items-center m-1">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 md:px-6 py-2 md:py-3 rounded-full hover:from-blue-600 hover:to-blue-800 transition-all duration-200 font-medium flex items-center gap-1 md:gap-2 text-xs md:text-sm">
                 <button type="submit" className="cursor-pointer">
                   {isSearching ? (
                     <FaSpinner className="animate-spin text-white" />
                   ) : (
-                    <FaSearch className="text-white" />
+                    <div className="flex justify-between items-center gap-2">
+                      <FaSearch className="text-white text-lg md:text-sm" />
+                      <span className="hidden md:inline">Search</span>
+                    </div>
                   )}
                 </button>
               </div>
@@ -354,16 +361,30 @@ const HomePage = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex justify-center flex-wrap gap-4 mt-12 z-0 md:bg-gradient-to-r from-blue-500 to-blue-700 p-3 rounded-xl">
+        {/* Mobile view - scrollable */}
+        <div className="flex md:hidden mt-12 z-0 overflow-x-auto no-scrollbar max-w-screen snap-x snap-mandatory p-2 rounded-md bg-blue-500 gap-1">
           {tabOptions.map((tab, idx) => (
             <button
               key={idx}
               onClick={() => handleTabClick(tab.label)}
-              className={`flex items-center space-x-2 px-6 py-3 rounded bg-blue-400 hover:bg-blue-700 transition h-20 cursor-pointer
-            ${idx >= 3 ? "hidden md:flex" : ""}`}
+              className="flex items-center space-x-2 px-6 py-3 rounded bg-blue-700 transition h-25 cursor-pointer flex-shrink-0 w-1/2 snap-center"
             >
               {tab.icon}
-              <span className="text-sm font-medium">{tab.label}</span>
+              <span className="text-md font-medium">{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Desktop view - normal flex wrap */}
+        <div className="hidden md:flex justify-center flex-wrap gap-6 mt-12 z-0 bg-gradient-to-r from-blue-500 to-blue-700 p-3 rounded-lg">
+          {tabOptions.map((tab, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleTabClick(tab.label)}
+              className={`flex items-center space-x-2 px-6 py-3 rounded md:bg-transparent md:hover:bg-blue-700 transition h-25 cursor-pointer`}
+            >
+              {tab.icon}
+              <span className="text-md font-medium">{tab.label}</span>
             </button>
           ))}
         </div>
@@ -371,7 +392,7 @@ const HomePage = () => {
 
       <CategoriesSection />
 
-      <div className="max-w-[1280px] mx-auto px-4 py-8">
+      <div className="mx-auto md:mx-10 px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
             Top Rated
@@ -471,7 +492,7 @@ const HomePage = () => {
                   </h2>
                   <a
                     href={`/${img.category.replace(/\s+/g, "-")}/${img.slug}`}
-                    className={`block text-center text-white font-medium text-xs md:text-sm py-1.5 md:py-2 px-2 md:px-3 rounded-md md:rounded transition-all duration-300 hover:scale-105 ${
+                    className={`block text-center text-white font-semibold text-xs md:text-sm py-1.5 md:py-2 px-2 md:px-3 rounded-md md:rounded transition-all duration-300 hover:scale-105 ${
                       img.type === "premium"
                         ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 shadow-md"
                         : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-md"
@@ -510,7 +531,7 @@ const HomePage = () => {
             {/* Content Side */}
             <div className="space-y-8">
               <div className="space-y-4">
-                <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
                   Join The Creator Community
                 </h2>
                 <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
@@ -523,7 +544,7 @@ const HomePage = () => {
               {/* Features */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                     <svg
                       className="w-4 h-4 text-white"
                       fill="currentColor"
@@ -547,7 +568,7 @@ const HomePage = () => {
                 </div>
 
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                     <svg
                       className="w-4 h-4 text-white"
                       fill="currentColor"
@@ -571,7 +592,7 @@ const HomePage = () => {
                 </div>
 
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                     <svg
                       className="w-4 h-4 text-white"
                       fill="currentColor"
@@ -595,7 +616,7 @@ const HomePage = () => {
                 </div>
 
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                     <svg
                       className="w-4 h-4 text-white"
                       fill="currentColor"
@@ -621,10 +642,10 @@ const HomePage = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                   Join Community
                 </button>
-                <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105">
+                <button className="border-2 border-blue-500 text-blue-700 hover:bg-blue-600 hover:text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105">
                   Learn More
                 </button>
               </div>
@@ -638,7 +659,7 @@ const HomePage = () => {
                   <div className="text-sm text-gray-600">Resources</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl md:text-3xl font-bold text-purple-600">
+                  <div className="text-2xl md:text-3xl font-bold text-blue-600">
                     5K+
                   </div>
                   <div className="text-sm text-gray-600">Creators</div>

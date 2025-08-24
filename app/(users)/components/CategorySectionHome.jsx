@@ -120,8 +120,8 @@ const CategoriesSection = () => {
   const translateXPercent = currentIndex * itemWidthPercent;
 
   return (
-    <section className="py-12 px-4 bg-gradient-to-b from-gray-50 to-white font-inter">
-      <div className="max-w-[1280px] mx-auto">
+    <section className="py-12 px-4 font-inter">
+      <div className="mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
             Explore Categories
@@ -194,7 +194,7 @@ const CategoriesSection = () => {
                   width: `${itemWidthPercent}%`,
                 }}
               >
-                <div className="group block cursor-pointer rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white">
+                <div className="group block cursor-pointer rounded-lg overflow-hidden w-1/2 md:w-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white">
                   <div
                     className={`relative overflow-hidden border border-blue-400 rounded-t-lg ${
                       itemsPerView === 1 ? "h-56" : "pt-[100%]"
