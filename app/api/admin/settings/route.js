@@ -54,12 +54,11 @@ export async function GET(req) {
         password: '',
         senderEmail: ''
       },
-      razorpay: {
-        keyId: settings.razorpay?.keyId || '',
-        // Don't send secret keys in GET request for security
-        keySecret: settings.razorpay?.keySecret ? '••••••••••••' : '',
-        webhookSecret: settings.razorpay?.webhookSecret ? '••••••••••••' : ''
-      },
+        razorpay: {
+          keyId: settings.razorpay?.keyId || '',
+          keySecret: settings.razorpay?.keySecret || '',
+          webhookSecret: settings.razorpay?.webhookSecret || ''
+        },
       siteName: settings.siteName || 'Vecteno',
       siteUrl: settings.siteUrl || 'http://localhost:3000'
     });
