@@ -469,7 +469,7 @@ const Navbar = () => {
                 isPremium
                   ? "bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black shadow-md"
                   : "bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400 text-gray-700"
-              } px-4 py-2 rounded-lg font-semibold shadow-sm hover:shadow-md`}
+              } px-4 py-2 rounded-sm font-semibold shadow-sm hover:shadow-md`}
             >
               <FaCrown className="mr-2" />
               {isPremium ? "Premium Tier" : "Free Tier"}

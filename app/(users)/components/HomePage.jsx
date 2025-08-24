@@ -362,7 +362,7 @@ const HomePage = () => {
 
         {/* Tab Navigation */}
         {/* Mobile view - scrollable */}
-        <div className="flex md:hidden mt-12 z-0 overflow-x-auto no-scrollbar max-w-screen snap-x snap-mandatory p-2 rounded-md bg-blue-500 gap-1">
+        <div className="flex md:hidden p-2 mt-12 z-0 overflow-x-auto no-scrollbar max-w-screen snap-x snap-mandatory rounded-md border-red-100 bg-blue-500 gap-1">
           {tabOptions.map((tab, idx) => (
             <button
               key={idx}
