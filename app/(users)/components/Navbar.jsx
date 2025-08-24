@@ -248,14 +248,14 @@ const Navbar = () => {
             </Link>
 
             <div className="hidden md:block relative group">
-              <button className="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2.5 rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-200">
+              <button className="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2.5 rounded font-medium shadow-md hover:shadow-lg transition-all duration-200 hover:cursor-pointer">
                 <FaBars className="mr-2 text-sm" />
-                <span className="font-semibold">Categories</span>
+                <span className="font-medium">Categories</span>
                 <IoIosArrowDown className="ml-2 text-sm" />
               </button>
 
               <ul
-                className="absolute left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl 
+                className="absolute left-0 mt-1 bg-white border border-gray-200 rounded shadow-xl 
     opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 
     z-50 backdrop-blur-sm p-2 w-40 max-h-[240px] overflow-y-auto"
               >
@@ -263,7 +263,7 @@ const Navbar = () => {
                   <li key={idx}>
                     <Link
                       href={`/${cat.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="block px-4 py-2 hover:bg-blue-500 hover:text-white text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap"
+                      className="block px-4 py-2 hover:bg-blue-500 hover:text-white text-sm font-medium transition-colors duration-200 rounded whitespace-nowrap"
                     >
                       {cat}
                     </Link>
@@ -280,7 +280,7 @@ const Navbar = () => {
           >
             <form
               onSubmit={handleSearch}
-              className="flex items-center w-full border-2 border-gray-200 hover:border-blue-300 focus-within:border-blue-500 rounded-full px-5 py-3 shadow-lg hover:shadow-xl transition-all duration-300 bg-gray-50 hover:bg-white"
+              className="flex items-center w-full border-2 border-gray-200 hover:border-blue-300 focus-within:border-blue-500 rounded-full px-5 py-3 shadow-md hover:shadow-lg transition-all duration-300 bg-gray-50 hover:bg-white"
             >
               <input
                 type="text"
@@ -396,7 +396,7 @@ const Navbar = () => {
                     : "text-gray-700 hover:text-blue-600"
                 }`}
               >
-                <Link href="/blogs">Blogs</Link>
+                <Link href="https://vecteno.com/blog/">Blogs</Link>
               </li>
               <li
                 className={`pb-2 transition-all duration-200 ${
