@@ -1122,40 +1122,44 @@ export default function AdminSettingsPage() {
                   />
                 </div>
 
-                 <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        App Password
-      </label>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    App Password
+                  </label>
 
-      {/* Wrap input + eye button inside a relative container */}
-      <div className="relative">
-        <input
-          type={showPassword ? "text" : "password"}
-          value={smtpConfig.password}
-          onChange={(e) =>
-            setSmtpConfig((prev) => ({
-              ...prev,
-              password: e.target.value,
-            }))
-          }
-          className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="Your Gmail App Password"
-        />
+                  {/* Wrap input + eye button inside a relative container */}
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={smtpConfig.password}
+                      onChange={(e) =>
+                        setSmtpConfig((prev) => ({
+                          ...prev,
+                          password: e.target.value,
+                        }))
+                      }
+                      className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Your Gmail App Password"
+                    />
 
-        {/* Eye Icon Button */}
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer"
-        >
-          {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-        </button>
-      </div>
+                    {/* Eye Icon Button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer"
+                    >
+                      {showPassword ? (
+                        <FiEyeOff size={20} />
+                      ) : (
+                        <FiEye size={20} />
+                      )}
+                    </button>
+                  </div>
 
-      <p className="text-sm text-gray-500 mt-1">
-        For Gmail, use an App Password, not your regular password
-      </p>
-    </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    For Gmail, use an App Password, not your regular password
+                  </p>
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1229,7 +1233,7 @@ export default function AdminSettingsPage() {
         )}
 
         {/* Razorpay Configuration Tab */}
-      {activeTab === "razorpay" && (
+        {activeTab === "razorpay" && (
           <div className="p-6">
             <div className="max-w-2xl">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">
@@ -1253,12 +1257,7 @@ export default function AdminSettingsPage() {
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="rzp_test_xxxxxxxxxx"
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Your Razorpay Key ID from dashboard
-                  </p>
-                </div>
-
-          <div>
+  <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Razorpay Key Secret
   </label>
@@ -1274,16 +1273,20 @@ export default function AdminSettingsPage() {
         }))
       }
       className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      placeholder="Your Secret Key"
+      placeholder={razorpayConfig.keySecret ? "••••••••••" : "Your Secret Key"}
     />
 
     {/* Eye toggle button */}
     <button
       type="button"
       onClick={() => setShowRazorpaySecret((prev) => !prev)}
-      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
     >
-      {showRazorpaySecret ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
+      {showRazorpaySecret ? (
+        <FiEyeOff className="w-5 h-5" />
+      ) : (
+        <FiEye className="w-5 h-5" />
+      )}
     </button>
   </div>
 
@@ -1291,35 +1294,46 @@ export default function AdminSettingsPage() {
     Keep this secret and secure
   </p>
 </div>
-                <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Webhook Secret (Optional)
-  </label>
-  <div className="relative">
-    <input
-      type={showWebhookSecret ? "text" : "password"}
-      value={razorpayConfig.webhookSecret}
-      onChange={(e) =>
-        setRazorpayConfig((prev) => ({
-          ...prev,
-          webhookSecret: e.target.value,
-        }))
-      }
-      className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      placeholder="Webhook Secret"
-    />
-    <button
-      type="button"
-      onClick={() => setShowWebhookSecret((prev) => !prev)}
-      className="absolute right-3 top-1/2 cursor-pointer transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-    >
-      {showWebhookSecret ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
-    </button>
-  </div>
-  <p className="text-sm text-gray-500 mt-1">
-    For webhook verification (optional)
-  </p>
+  
+  {!razorpayConfig.keySecret && (
+    <p className="text-sm text-gray-500 mt-1">
+      Keep this secret and secure
+    </p>
+  )}
 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Webhook Secret (Optional)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showWebhookSecret ? "text" : "password"}
+                      value={razorpayConfig.webhookSecret}
+                      onChange={(e) =>
+                        setRazorpayConfig((prev) => ({
+                          ...prev,
+                          webhookSecret: e.target.value,
+                        }))
+                      }
+                      className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Webhook Secret"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowWebhookSecret((prev) => !prev)}
+                      className="absolute right-3 top-1/2 cursor-pointer transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    >
+                      {showWebhookSecret ? (
+                        <FiEyeOff className="w-5 h-5" />
+                      ) : (
+                        <FiEye className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    For webhook verification (optional)
+                  </p>
+                </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <div className="flex items-start gap-3">

@@ -235,7 +235,7 @@ const AdminLoginPage = () => {
                   <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-200 hover:text-white transition-colors duration-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-200 hover:text-white transition-colors duration-200 cursor-pointer"
                     disabled={isLoading}
                   >
                     {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
@@ -254,7 +254,7 @@ const AdminLoginPage = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center gap-2">
@@ -353,7 +353,7 @@ const AdminLoginPage = () => {
               <button
                 type="button"
                 onClick={() => router.push('/admin/forgot-password')}
-                className="text-blue-300 hover:text-white text-sm font-medium transition-colors duration-200 underline underline-offset-2 hover:underline-offset-4"
+                className="text-blue-300 hover:text-white text-sm font-medium transition-colors duration-200 underline underline-offset-2 hover:underline-offset-4 cursor-pointer"
               >
                 Forgot your password?
               </button>

@@ -437,7 +437,7 @@ const Navbar = () => {
                     <li>
                       <Link
                         href="/user/dashboard"
-                        className="block px-4 py-3 hover:bg-blue-50 hover:text-blue-600 font-medium transition-colors duration-200"
+                        className="block px-4 py-3 hover:bg-blue-50 hover:text-blue-600 font-medium transition-colors duration-200 cursor-pointer"
                       >
                         My Profile
                       </Link>
@@ -445,7 +445,7 @@ const Navbar = () => {
                     <li>
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         Logout
                       </button>

@@ -191,7 +191,7 @@ const Sidebar = () => {
               setMenuOpen(false);
               handleLogout();
             }}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-red-300 hover:text-white hover:bg-red-600 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-red-300 hover:text-white hover:bg-red-600 transition-colors cursor-pointer"
           >
             <FiLogOut size={18} />
             <span>Logout</span>
