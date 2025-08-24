@@ -21,7 +21,8 @@ import {
 } from "react-icons/fi";
 
 export default function AdminSettingsPage() {
-  const [showSecret, setShowSecret] = useState(false);
+  const [showRazorpaySecret, setShowRazorpaySecret] = useState(false);
+  const [showWebhookSecret, setShowWebhookSecret] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -481,7 +482,7 @@ export default function AdminSettingsPage() {
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer">
               <FiUser className="w-5 h-5" />
               Profile Information
             </div>
@@ -494,7 +495,7 @@ export default function AdminSettingsPage() {
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer">
               <FiLock className="w-5 h-5" />
               Password
             </div>
@@ -507,7 +508,7 @@ export default function AdminSettingsPage() {
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer">
               <FiSmartphone className="w-5 h-5" />
               Two-Factor Auth
             </div>
@@ -520,7 +521,7 @@ export default function AdminSettingsPage() {
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer">
               <FiServer className="w-5 h-5" />
               SMTP Settings
             </div>
@@ -533,7 +534,7 @@ export default function AdminSettingsPage() {
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer">
               <FiCreditCard className="w-5 h-5" />
               Razorpay
             </div>
@@ -547,7 +548,7 @@ export default function AdminSettingsPage() {
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer">
               <FiFileText className="w-5 h-5" />
               License Text
             </div>
@@ -1200,14 +1201,14 @@ export default function AdminSettingsPage() {
                     type="button"
                     onClick={handleSmtpTest}
                     disabled={saving}
-                    className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                    className="px-6  py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
                   >
                     {saving ? "Testing..." : "Test Connection"}
                   </button>
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    className="flex items-center  gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                   >
                     {saving ? (
                       <>
@@ -1228,7 +1229,7 @@ export default function AdminSettingsPage() {
         )}
 
         {/* Razorpay Configuration Tab */}
-        {activeTab === "razorpay" && (
+      {activeTab === "razorpay" && (
           <div className="p-6">
             <div className="max-w-2xl">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">
@@ -1257,60 +1258,68 @@ export default function AdminSettingsPage() {
                   </p>
                 </div>
 
-      <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        Razorpay Key Secret
-      </label>
+          <div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Razorpay Key Secret
+  </label>
 
-      <div className="relative">
-        <input
-          type={showSecret ? "text" : "password"}
-          value={razorpayConfig.keySecret}
-          onChange={(e) =>
-            setRazorpayConfig((prev) => ({
-              ...prev,
-              keySecret: e.target.value,
-            }))
-          }
-          className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="Your Secret Key"
-        />
+  <div className="relative">
+    <input
+      type={showRazorpaySecret ? "text" : "password"}
+      value={razorpayConfig.keySecret}
+      onChange={(e) =>
+        setRazorpayConfig((prev) => ({
+          ...prev,
+          keySecret: e.target.value,
+        }))
+      }
+      className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      placeholder="Your Secret Key"
+    />
 
-        {/* Eye toggle button */}
-        <button
-          type="button"
-          onClick={() => setShowSecret((prev) => !prev)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer"
-        >
-          {showSecret ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-        </button>
-      </div>
+    {/* Eye toggle button */}
+    <button
+      type="button"
+      onClick={() => setShowRazorpaySecret((prev) => !prev)}
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+    >
+      {showRazorpaySecret ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
+    </button>
+  </div>
 
-      <p className="text-sm text-gray-500 mt-1">
-        Keep this secret and secure
-      </p>
-    </div>
-
+  <p className="text-sm text-gray-500 mt-1">
+    Keep this secret and secure
+  </p>
+</div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Webhook Secret (Optional)
-                  </label>
-                  <input
-                    type="password"
-                    value={razorpayConfig.webhookSecret}
-                    onChange={(e) =>
-                      setRazorpayConfig((prev) => ({
-                        ...prev,
-                        webhookSecret: e.target.value,
-                      }))
-                    }
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Webhook Secret"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    For webhook verification (optional)
-                  </p>
-                </div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Webhook Secret (Optional)
+  </label>
+  <div className="relative">
+    <input
+      type={showWebhookSecret ? "text" : "password"}
+      value={razorpayConfig.webhookSecret}
+      onChange={(e) =>
+        setRazorpayConfig((prev) => ({
+          ...prev,
+          webhookSecret: e.target.value,
+        }))
+      }
+      className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      placeholder="Webhook Secret"
+    />
+    <button
+      type="button"
+      onClick={() => setShowWebhookSecret((prev) => !prev)}
+      className="absolute right-3 top-1/2 cursor-pointer transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+    >
+      {showWebhookSecret ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
+    </button>
+  </div>
+  <p className="text-sm text-gray-500 mt-1">
+    For webhook verification (optional)
+  </p>
+</div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <div className="flex items-start gap-3">
@@ -1334,23 +1343,23 @@ export default function AdminSettingsPage() {
                     type="button"
                     onClick={handleRazorpayTest}
                     disabled={saving}
-                    className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                    className="px-6 py-2 cursor-pointer border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
                   >
                     {saving ? "Testing..." : "Test Connection"}
                   </button>
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    className="flex cursor-pointer items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                   >
                     {saving ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin "></div>
                         Saving...
                       </>
                     ) : (
                       <>
-                        <FiSave className="w-4 h-4" />
+                        <FiSave className="w-4 h-4 " />
                         Save Razorpay Settings
                       </>
                     )}
