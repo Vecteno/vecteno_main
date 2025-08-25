@@ -105,7 +105,10 @@ export default function ProductDetailPage({ params }) {
       window.location.href = "/login";
       return;
     }
-    if (image.type === "premium" && (!userPlan || userPlan.status !== "active" || userPlan.type !== "premium")) {
+    if (
+      image.type === "premium" &&
+      (!userPlan || userPlan.status !== "active" || userPlan.type !== "premium")
+    ) {
       window.location.href = "/pricing";
       return;
     }
@@ -184,7 +187,11 @@ export default function ProductDetailPage({ params }) {
       };
     }
     if (image.type === "premium") {
-      if (userPlan && userPlan.status === "active" && userPlan.type === "premium") {
+      if (
+        userPlan &&
+        userPlan.status === "active" &&
+        userPlan.type === "premium"
+      ) {
         return {
           text: "Premium Download",
           onClick: handleDownload,
@@ -322,7 +329,7 @@ export default function ProductDetailPage({ params }) {
                 {/* Premium/Free Badge */}
                 {image.type === "premium" && (
                   <div className="absolute top-4 left-4">
-                    <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-3 py-1 flex items-center gap-1 text-sm font-semibold shadow-lg cursor-pointer">
+                    <div className="bg-gradient-to-r from-yellow-400 to-yellow-700 text-black px-3 py-1 flex items-center gap-1 text-sm font-semibold shadow-lg cursor-pointer">
                       <FaCrown className="text-xs" />
                       Premium
                     </div>
@@ -330,7 +337,7 @@ export default function ProductDetailPage({ params }) {
                 )}
                 {image.type === "free" && (
                   <div className="absolute top-4 left-4">
-                    <div className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-3 py-1 flex items-center gap-1 text-sm font-semibold shadow-lg cursor-pointer">
+                    <div className="bg-gradient-to-r from-blue-400 to-blue-700 text-white px-3 py-1 flex items-center gap-1 text-sm font-semibold shadow-lg cursor-pointer">
                       <FaGift className="text-xs" />
                       Free
                     </div>
@@ -448,10 +455,18 @@ export default function ProductDetailPage({ params }) {
                   {isLiking ? (
                     <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                   ) : (
-                    <FaHeart className={isLiked ? "text-white cursor-pointer" : "cursor-pointer"} />
+                    <FaHeart
+                      className={
+                        isLiked ? "text-white cursor-pointer" : "cursor-pointer"
+                      }
+                    />
                   )}
-                  {isLiked ? `${likeCount}` : "Like"}
+                  {/* Always show total likes */}
+                  <span>
+                    {likeCount} {likeCount === 1 ? "Like" : "Likes"}
+                  </span>
                 </button>
+
                 <button
                   onClick={handleShare}
                   className="py-3 px-4 bg-green-100 text-green-700 hover:bg-green-200 font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer"
@@ -522,7 +537,6 @@ export default function ProductDetailPage({ params }) {
     </div>
   );
 }
-
 
 // "use client";
 
