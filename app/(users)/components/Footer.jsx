@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaYoutube, FaHeart, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
-
+import { FiUsers } from "react-icons/fi";
 const Footer = () => {
   const resources = [
     { name: "Products", href: "/products" },
@@ -46,7 +46,7 @@ const Footer = () => {
                 Your ultimate destination for premium graphic resources
               </p>
             </div>
-            
+
             {/* Contact Info */}
             <div className="space-y-3 mb-6">
               <div className="flex items-center space-x-3 text-gray-300">
@@ -55,7 +55,10 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <FaEnvelope className="text-blue-400 flex-shrink-0" />
-                <a href="mailto:info@vecteno.com" className="text-sm hover:text-blue-400 transition-colors">
+                <a
+                  href="mailto:info@vecteno.com"
+                  className="text-sm hover:text-blue-400 transition-colors"
+                >
                   info@vecteno.com
                 </a>
               </div>
@@ -114,21 +117,23 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          {/* Join Community */}
           <div className="col-span-2 md:col-span-1">
-            <h3 className="text-lg font-semibold mb-4 text-white">Newsletter</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">
+              Join Our Community
+            </h3>
             <p className="text-gray-300 text-sm mb-4">
-              Subscribe to our newsletter for the latest updates and exclusive offers.
+              Connect with other creators and get exclusive content, updates,
+              and support.
             </p>
             <div className="space-y-3">
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
-              />
-              <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
-                Subscribe
+              <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center cursor-pointer justify-center gap-2">
+                <FiUsers className="w-5 h-5" />
+                Join Community
               </button>
+              <p className="text-gray-400 text-xs text-center">
+                Free to join • Instant access
+              </p>
             </div>
           </div>
         </div>
@@ -140,14 +145,15 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-gray-400 text-sm">
-                Powered By – God of Graphics | Copyright © 2025 Vecteno. All rights reserved.
+                Powered By – God of Graphics | Copyright © 2025 Vecteno. All
+                rights reserved.
               </p>
             </div>
             <div className="text-center md:text-right">
               <p className="text-gray-400 text-sm flex items-center justify-center md:justify-end">
-                Developed with <FaHeart className="text-red-500 mx-1" /> by 
-                <a 
-                  href="#" 
+                Developed with <FaHeart className="text-red-500 mx-1" /> by
+                <a
+                  href="#"
                   className="text-blue-400 hover:text-blue-300 transition-colors ml-1"
                 >
                   Saarthi Digital Media and Marketing
@@ -159,13 +165,23 @@ const Footer = () => {
       </div>
 
       {/* Back to Top Button */}
-      <button 
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 z-50"
         aria-label="Back to top"
       >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 10l7-7m0 0l7 7m-7-7v18"
+          />
         </svg>
       </button>
     </footer>

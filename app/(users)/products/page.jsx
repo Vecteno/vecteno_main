@@ -37,7 +37,9 @@ export default function ImageGallery() {
   const fileTypeDropdownRef = useRef(null);
   const categoryDropdownRef = useRef(null);
 
-  const limit = 9;
+  // CHANGED: Increased from 9 to 25 (you can set between 20-30)
+  const limit = 25;
+
   const router = useRouter();
 
   // Filter options
@@ -519,9 +521,9 @@ export default function ImageGallery() {
       </div>
 
       {loading ? (
-        // YouTube-style masonry skeleton loading
+        // CHANGED: Updated to show 25 skeleton loaders (matching the new limit)
         <div className="columns-2 sm:columns-3 md:columns-4 gap-4 space-y-4 px-2">
-          {[...Array(12)].map((_, i) => (
+          {[...Array(limit)].map((_, i) => (
             <div
               key={i}
               className="relative w-full break-inside-avoid overflow-hidden rounded-lg shadow mb-4"
@@ -653,6 +655,7 @@ export default function ImageGallery() {
     </div>
   );
 }
+
 
 // "use client";
 // import Link from "next/link";
@@ -855,12 +858,36 @@ export default function ImageGallery() {
 //     );
 //   };
 
-//   // Close other dropdowns when one opens
-//   const openDropdown = (dropdownType) => {
-//     setShowLicenseDropdown(dropdownType === "license");
-//     setShowOrientationDropdown(dropdownType === "orientation");
-//     setShowFileTypeDropdown(dropdownType === "fileType");
-//     setShowCategoryDropdown(dropdownType === "category");
+//   // Toggle dropdowns - open when clicked, close when clicked again
+//   const toggleDropdown = (dropdownType) => {
+//     switch (dropdownType) {
+//       case "license":
+//         setShowLicenseDropdown((prev) => !prev);
+//         setShowOrientationDropdown(false);
+//         setShowFileTypeDropdown(false);
+//         setShowCategoryDropdown(false);
+//         break;
+//       case "orientation":
+//         setShowOrientationDropdown((prev) => !prev);
+//         setShowLicenseDropdown(false);
+//         setShowFileTypeDropdown(false);
+//         setShowCategoryDropdown(false);
+//         break;
+//       case "fileType":
+//         setShowFileTypeDropdown((prev) => !prev);
+//         setShowLicenseDropdown(false);
+//         setShowOrientationDropdown(false);
+//         setShowCategoryDropdown(false);
+//         break;
+//       case "category":
+//         setShowCategoryDropdown((prev) => !prev);
+//         setShowLicenseDropdown(false);
+//         setShowOrientationDropdown(false);
+//         setShowFileTypeDropdown(false);
+//         break;
+//       default:
+//         break;
+//     }
 //   };
 
 //   // Generate pagination numbers
@@ -913,24 +940,6 @@ export default function ImageGallery() {
 //     return numbers;
 //   };
 
-//   useEffect(() => {
-//     function handleClickOutside(event) {
-//       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-//         setShowCategoryDropdown(false);
-//       }
-//     }
-
-//     if (showCategoryDropdown) {
-//       document.addEventListener("mousedown", handleClickOutside);
-//     } else {
-//       document.removeEventListener("mousedown", handleClickOutside);
-//     }
-
-//     return () => {
-//       document.removeEventListener("mousedown", handleClickOutside);
-//     };
-//   }, [showCategoryDropdown]);
-
 //   return (
 //     <div className="py-6 h-full">
 //       {/* Enhanced Search Bar - Matching the image design */}
@@ -938,6 +947,7 @@ export default function ImageGallery() {
 //         <div className="bg-white border border-gray-200 shadow-lg rounded-full p-2">
 //           <form onSubmit={handleSearch} className="flex items-center">
 //             {/* Left Section - Category Dropdown (Hidden on Mobile) */}
+//             {" "} 
 //             <div
 //               className="relative flex items-center hidden md:flex"
 //               ref={categoryDropdownRef}
@@ -976,7 +986,6 @@ export default function ImageGallery() {
 //               {/* Vertical separator line */}
 //               <div className="w-px h-8 bg-gray-300 mx-2"></div>
 //             </div>
-
 //             {/* Middle Section - Search Input */}
 //             <div className="flex-1">
 //               <input
@@ -987,7 +996,6 @@ export default function ImageGallery() {
 //                 className="w-full outline-none text-sm px-4 py-3 text-gray-700 placeholder-gray-400 md:pl-0 pl-4"
 //               />
 //             </div>
-
 //             {/* Right Section - Search Button */}
 //             <button
 //               type="submit"
@@ -1044,8 +1052,8 @@ export default function ImageGallery() {
 //         {/* License Dropdown */}
 //         <div className="relative" ref={licenseDropdownRef}>
 //           <button
-//             onClick={() => openDropdown("license")}
-//             className="flex items-center gap-1 md:gap-2 bg-white border border-gray-300 rounded-lg px-2 md:px-4 py-1 md:py-2 shadow-sm hover:bg-gray-50 transition-colors"
+//             onClick={() => toggleDropdown("license")}
+//             className="flex items-center gap-1 md:gap-2 bg-white border border-gray-300 rounded-lg px-2 md:px-4 py-1 md:py-2 shadow-sm hover:bg-gray-50 transition-colors cursor-pointer"
 //           >
 //             <span className="text-xs md:text-sm font-medium">License</span>
 //             <IoIosArrowDown
@@ -1085,8 +1093,8 @@ export default function ImageGallery() {
 //         {/* Orientation Dropdown */}
 //         <div className="relative" ref={orientationDropdownRef}>
 //           <button
-//             onClick={() => openDropdown("orientation")}
-//             className="flex items-center gap-1 md:gap-2 bg-white border border-gray-300 rounded-lg px-2 md:px-4 py-1 md:py-2 shadow-sm hover:bg-gray-50 transition-colors"
+//             onClick={() => toggleDropdown("orientation")}
+//             className="flex items-center gap-1 md:gap-2 bg-white border border-gray-300 rounded-lg px-2 md:px-4 py-1 md:py-2 shadow-sm hover:bg-gray-50 transition-colors cursor-pointer"
 //           >
 //             <span className="text-xs md:text-sm font-medium">Orientation</span>
 //             <IoIosArrowDown
@@ -1123,8 +1131,8 @@ export default function ImageGallery() {
 //         {/* File Type Dropdown */}
 //         <div className="relative" ref={fileTypeDropdownRef}>
 //           <button
-//             onClick={() => openDropdown("fileType")}
-//             className="flex items-center gap-1 md:gap-2 bg-white border border-gray-300 rounded-lg px-2 md:px-4 py-1 md:py-2 shadow-sm hover:bg-gray-50 transition-colors"
+//             onClick={() => toggleDropdown("fileType")}
+//             className="flex items-center gap-1 md:gap-2 bg-white border border-gray-300 rounded-lg px-2 md:px-4 py-1 md:py-2 shadow-sm hover:bg-gray-50 transition-colors cursor-pointer"
 //           >
 //             <span className="text-xs md:text-sm font-medium">File Type</span>
 //             <IoIosArrowDown
@@ -1163,7 +1171,7 @@ export default function ImageGallery() {
 //             setSearchQuery("");
 //             setSelectedCategory("All Creatives");
 //           }}
-//           className="text-gray-600 hover:text-gray-800 text-xs md:text-sm underline"
+//           className="text-gray-600 hover:text-gray-800 text-xs md:text-sm underline cursor-pointer"
 //         >
 //           Clear All
 //         </button>
@@ -1304,3 +1312,4 @@ export default function ImageGallery() {
 //     </div>
 //   );
 // }
+
