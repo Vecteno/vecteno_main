@@ -182,3 +182,9 @@
 .sidebar::-webkit-scrollbar {
   display: none;
 }
+
+button, 
+a,
+[role="button"] {
+  cursor: pointer;
+}

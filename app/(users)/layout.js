@@ -19,7 +19,7 @@ const robotoMono = Roboto_Mono({
 export default function UsersLayout({ children }) {
   return (
     <div className={`${inter.variable} ${robotoMono.variable}`}>
-      <Navbar />
+      <Navbar className='z-75'/>
       <LoadingBar />
       <Toaster position="top-center" reverseOrder={false} />
       <Suspense fallback={<div>Loading...</div>}> 

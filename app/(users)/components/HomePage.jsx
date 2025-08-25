@@ -498,6 +498,7 @@ const HomePage = () => {
                         : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-md"
                     }`}
                   >
+                    
                     {img.type === "premium" ? (
                       <span className="flex items-center justify-center gap-1">
                         <FaCrown className="text-xs md:text-sm" />
