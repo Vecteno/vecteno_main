@@ -196,7 +196,7 @@ const Navbar = () => {
       method: "POST",
     });
 
-    window.location.href = "/"; // Or wherever you want them to land
+    window.location.href = "/";
   };
 
   // Close dropdown when clicking outside
@@ -469,74 +469,6 @@ const Navbar = () => {
           >
             {mobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
-          <div className="border-t md:hidden">
-            <div className="flex items-center space-x-4">
-              {isLoggedIn ? (
-                <div className="relative" ref={dropdownRef}>
-                  {/* Avatar */}
-                  <div
-                    className="text-black cursor-pointer rounded-full p-2 hover:bg-gray-200 border"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                  >
-                    {userImage ? (
-                      <img
-                        src={userImage}
-                        alt="Profile"
-                        className="w-10 h-10 rounded-full cursor-pointer border hover:ring-2"
-                      />
-                    ) : (
-                      <DefaultUserIcon
-                        size={40}
-                        className="cursor-pointer hover:ring-2"
-                      />
-                    )}
-                  </div>
-
-                  {/* Dropdown */}
-                  {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
-                      <div className="px-4 py-2 border-b">
-                        <Link
-                          href="/pricing"
-                          onClick={() => setDropdownOpen(false)}
-                          className={`flex items-center ${
-                            isPremium
-                              ? "bg-yellow-400 text-black"
-                              : "bg-gray-200 text-gray-700"
-                          } px-3 py-1 rounded font-semibold`}
-                        >
-                          <FaCrown className="mr-2" />
-                          {isPremium ? "Premium Tier" : "Free Tier"}
-                        </Link>
-                      </div>
-
-                      <Link
-                        href="/user/dashboard"
-                        onClick={() => setDropdownOpen(false)}
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        My Profile
-                      </Link>
-
-                      <button
-                        onClick={() => {
-                          handleLogout();
-                          setDropdownOpen(false);
-                        }}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link href="/login">
-                  <FaUser className="text-2xl text-black hover:text-blue-600 transition" />
-                </Link>
-              )}
-            </div>
-          </div>
         </div>
 
         <div
@@ -550,7 +482,6 @@ const Navbar = () => {
               <FaTimes className="text-2xl text-gray-700 hover:text-red-600 transition" />
             </button>
           </div>
-
           <div className="p-4 space-y-6">
             {/* Categories */}
             <div>

@@ -359,7 +359,7 @@ export default function ImageGallery() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`flex-shrink-0 px-4 py-2 rounded-sm font-medium text-sm md:text-md transition-all duration-200 whitespace-nowrap ${
+                className={`flex-shrink-0 px-4 py-2 rounded-sm font-semibold text-sm md:text-md transition-all duration-200 whitespace-nowrap ${
                   selectedCategory === category
                     ? "bg-blue-600 text-white shadow-[0_0_15px_rgba(0,0,0,0.5)] transform scale-105"
                     : "text-blue-600 hover:bg-blue-50 hover:text-blue-700"
