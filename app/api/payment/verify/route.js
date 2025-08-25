@@ -13,28 +13,31 @@ export async function POST(req) {
   await connectToDatabase();
 
   const body = await req.json();
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, planId, couponCode } = body;
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, planId, couponCode, userId } = body;
 
   try {
-    // Try to get JWT token from cookies (for normal login)
-    const jwtToken = req.cookies.get("token")?.value;
+    let authenticatedUserId = userId;
 
-    let userId = null;
+    // If userId is not provided in request body, try to get from auth tokens
+    if (!authenticatedUserId) {
+      // Try to get JWT token from cookies (for normal login)
+      const jwtToken = req.cookies.get("token")?.value;
 
-    if (jwtToken) {
-      // If custom JWT exists, verify and extract user
-      const payload = await verifyJWT(jwtToken);
-      userId = payload.id;
-    } else {
-      // Else fallback to NextAuth token for Google login
-      const nextAuthToken = await getToken({ req });
-      if (!nextAuthToken || !nextAuthToken.id) {
-        return NextResponse.json(
-          { success: false, message: "Unauthorized" },
-          { status: 401 }
-        );
+      if (jwtToken) {
+        // If custom JWT exists, verify and extract user
+        const payload = await verifyJWT(jwtToken);
+        authenticatedUserId = payload.id;
+      } else {
+        // Else fallback to NextAuth token for Google login
+        const nextAuthToken = await getToken({ req });
+        if (!nextAuthToken || !nextAuthToken.id) {
+          return NextResponse.json(
+            { success: false, message: "Unauthorized" },
+            { status: 401 }
+          );
+        }
+        authenticatedUserId = nextAuthToken.id;
       }
-      userId = nextAuthToken.id;
     }
 
     // ✅ Verify Razorpay signature
@@ -68,12 +71,12 @@ export async function POST(req) {
     if (couponCode) {
       const coupon = await Coupon.findOne({ 
         code: couponCode,
-        usedBy: { $nin: [userId] },
+        usedBy: { $nin: [authenticatedUserId] },
         validTill: { $gte: new Date() }
       });
 
       if (coupon) {
-        coupon.usedBy.push(userId);
+        coupon.usedBy.push(authenticatedUserId);
         coupon.usageLimit -= 1;
         await coupon.save();
       }
@@ -81,7 +84,7 @@ export async function POST(req) {
 
     // ✅ Save transaction
     const transaction = await Transaction.create({
-      userId,
+      userId: authenticatedUserId,
       planId,
       razorpayOrderId: razorpay_order_id,
       razorpayPaymentId: razorpay_payment_id,
@@ -94,13 +97,14 @@ export async function POST(req) {
     // Get all valid transactions
     const now = new Date();
     const activeTransactions = await Transaction.find({
-      userId,
+      userId: authenticatedUserId,
       expiresAt: { $gt: now },
     });
 
-    // ✅ Update user premium status
-    await User.findByIdAndUpdate(userId, {
+    // ✅ Update user premium status AND plan name
+    await User.findByIdAndUpdate(authenticatedUserId, {
       isPremium: activeTransactions.length > 0,
+      planName: plan.name, // ✅ CRITICAL: Save the actual plan name
       premiumExpiresAt:
         activeTransactions.length > 0
           ? activeTransactions.sort(
@@ -109,7 +113,11 @@ export async function POST(req) {
           : null,
     });
 
-    return NextResponse.json({ success: true, transaction });
+    return NextResponse.json({ 
+      success: true, 
+      transaction,
+      message: "Payment verified and plan activated successfully"
+    });
   } catch (error) {
     console.error("Payment verification error:", error);
     return NextResponse.json(
@@ -118,3 +126,123 @@ export async function POST(req) {
     );
   }
 }
+// import { NextResponse } from "next/server";
+// import crypto from "crypto";
+// import connectToDatabase from "@/lib/db";
+// import User from "@/app/models/userModel";
+// import Transaction from "@/app/models/transactionModel";
+// import PricingPlan from "@/app/models/PricingPlan";
+// import Coupon from "@/app/models/couponModel";
+// import { verifyJWT } from "@/lib/jwt";
+// import { getToken } from "next-auth/jwt";
+// import { getRazorpayConfig } from "@/lib/razorpay";
+
+// export async function POST(req) {
+//   await connectToDatabase();
+
+//   const body = await req.json();
+//   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, planId, couponCode } = body;
+
+//   try {
+//     // Try to get JWT token from cookies (for normal login)
+//     const jwtToken = req.cookies.get("token")?.value;
+
+//     let userId = null;
+
+//     if (jwtToken) {
+//       // If custom JWT exists, verify and extract user
+//       const payload = await verifyJWT(jwtToken);
+//       userId = payload.id;
+//     } else {
+//       // Else fallback to NextAuth token for Google login
+//       const nextAuthToken = await getToken({ req });
+//       if (!nextAuthToken || !nextAuthToken.id) {
+//         return NextResponse.json(
+//           { success: false, message: "Unauthorized" },
+//           { status: 401 }
+//         );
+//       }
+//       userId = nextAuthToken.id;
+//     }
+
+//     // ✅ Verify Razorpay signature
+//     const razorpayConfig = await getRazorpayConfig();
+//     const generatedSignature = crypto
+//       .createHmac("sha256", razorpayConfig.keySecret)
+//       .update(razorpay_order_id + "|" + razorpay_payment_id)
+//       .digest("hex");
+
+//     if (generatedSignature !== razorpay_signature) {
+//       return NextResponse.json(
+//         { success: false, message: "Signature mismatch" },
+//         { status: 400 }
+//       );
+//     }
+
+//     // Get plan info
+//     const plan = await PricingPlan.findById(planId);
+//     if (!plan) {
+//       return NextResponse.json(
+//         { success: false, message: "Invalid plan" },
+//         { status: 400 }
+//       );
+//     }
+
+//     // ✅ Calculate expiry
+//     const expiresAt = new Date();
+//     expiresAt.setDate(expiresAt.getDate() + plan.validityInDays);
+
+//     // If coupon code is provided, mark as used
+//     if (couponCode) {
+//       const coupon = await Coupon.findOne({ 
+//         code: couponCode,
+//         usedBy: { $nin: [userId] },
+//         validTill: { $gte: new Date() }
+//       });
+
+//       if (coupon) {
+//         coupon.usedBy.push(userId);
+//         coupon.usageLimit -= 1;
+//         await coupon.save();
+//       }
+//     }
+
+//     // ✅ Save transaction
+//     const transaction = await Transaction.create({
+//       userId,
+//       planId,
+//       razorpayOrderId: razorpay_order_id,
+//       razorpayPaymentId: razorpay_payment_id,
+//       razorpaySignature: razorpay_signature,
+//       amount: body.amount || 0,
+//       expiresAt,
+//       couponCode: couponCode || null,
+//     });
+
+//     // Get all valid transactions
+//     const now = new Date();
+//     const activeTransactions = await Transaction.find({
+//       userId,
+//       expiresAt: { $gt: now },
+//     });
+
+//     // ✅ Update user premium status
+//     await User.findByIdAndUpdate(userId, {
+//       isPremium: activeTransactions.length > 0,
+//       premiumExpiresAt:
+//         activeTransactions.length > 0
+//           ? activeTransactions.sort(
+//               (a, b) => new Date(b.expiresAt) - new Date(a.expiresAt)
+//             )[0].expiresAt
+//           : null,
+//     });
+
+//     return NextResponse.json({ success: true, transaction });
+//   } catch (error) {
+//     console.error("Payment verification error:", error);
+//     return NextResponse.json(
+//       { success: false, message: error.message },
+//       { status: 500 }
+//     );
+//   }
+// }

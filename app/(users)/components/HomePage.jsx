@@ -498,16 +498,15 @@ const HomePage = () => {
                         : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-md"
                     }`}
                   >
-                    
                     {img.type === "premium" ? (
                       <span className="flex items-center justify-center gap-1">
-                        <FaCrown className="text-xs md:text-sm" />
+                        <FaCrown className="text-xs md:text-sm bg-gradient-to-r from-yellow-400 to-yellow-500 text-transparent bg-clip-text" />
                         <span className="hidden sm:inline">Premium</span>
                         <span className="sm:hidden">Premium</span>
                       </span>
                     ) : (
                       <span className="flex items-center justify-center gap-1">
-                        <FaGift className="text-xs md:text-sm" />
+                        <FaGift className="text-xs md:text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-transparent bg-clip-text" />
                         <span className="hidden sm:inline">Free Download</span>
                         <span className="sm:hidden">Free</span>
                       </span>
