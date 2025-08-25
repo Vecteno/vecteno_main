@@ -287,14 +287,14 @@ export default function ImageGallery() {
     <div className="py-6 h-full">
       {/* Enhanced Search Bar - Matching the image design */}
       <div className="max-w-6xl mx-auto px-4 mb-6">
-        <div className="bg-white border border-gray-200 shadow-lg rounded-full p-2">
+        <div className="bg-white border shadow-[0_0_15px_rgba(0,0,0,0.3)] rounded-full p-2">
           <form onSubmit={handleSearch} className="flex items-center">
             {/* Left Section - Category Dropdown (Hidden on Mobile) */}
             {" "} 
             <div
               className="relative flex items-center hidden md:flex"
               ref={categoryDropdownRef}
-            >
+            > 
               <button
                 type="button"
                 onClick={() => setShowCategoryDropdown((prev) => !prev)} // toggle open/close
@@ -353,18 +353,18 @@ export default function ImageGallery() {
 
       {/* Category Navigation Section */}
       <div className="max-w-6xl mx-auto px-4 mb-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3">
+        <div className="p-3">
           <div className="flex flex-nowrap overflow-x-auto gap-3 justify-between pb-1 hide-scrollbar">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`flex-shrink-0 px-4 py-2 rounded-lg font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap ${
+                className={`flex-shrink-0 px-4 py-2 rounded-sm font-medium text-sm md:text-md transition-all duration-200 whitespace-nowrap ${
                   selectedCategory === category
-                    ? "bg-blue-600 text-white shadow-md transform scale-105"
+                    ? "bg-blue-600 text-white shadow-[0_0_15px_rgba(0,0,0,0.5)] transform scale-105"
                     : "text-blue-600 hover:bg-blue-50 hover:text-blue-700"
                 }`}
-              >
+              > 
                 {category === "All Creatives" ? (
                   <>
                     <span className="hidden md:inline">All Creatives</span>

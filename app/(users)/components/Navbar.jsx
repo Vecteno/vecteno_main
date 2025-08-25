@@ -105,25 +105,11 @@ const Navbar = () => {
   // Sticky navbar scroll detection - only on desktop
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const isDesktop = window.innerWidth >= 768; // Only sticky on desktop (md breakpoint)
-      setIsSticky(scrollTop > 50 && isDesktop);
-    };
-
-    const handleResize = () => {
-      const isDesktop = window.innerWidth >= 768;
-      if (!isDesktop) {
-        setIsSticky(false); // Remove sticky on mobile
-      }
+      setIsSticky(window.scrollY > 50); // sticky for all screen sizes
     };
 
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Function to fetch user data
@@ -210,7 +196,7 @@ const Navbar = () => {
       method: "POST",
     });
 
-    window.location.href = "/login"; // Or wherever you want them to land
+    window.location.href = "/"; // Or wherever you want them to land
   };
 
   // Close dropdown when clicking outside
@@ -232,7 +218,7 @@ const Navbar = () => {
       <nav
         className={`bg-white shadow-lg px-6 py-5 w-auto transition-all duration-300 border-b border-gray-100 ${
           isSticky
-            ? "md:fixed md:top-0 md:left-0 md:right-0 md:z-50 md:bg-white/95 md:backdrop-blur-md md:shadow-xl md:border-b md:border-gray-200"
+            ? "fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200"
             : "relative"
         }`}
       >
@@ -483,21 +469,89 @@ const Navbar = () => {
           >
             {mobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
+          <div className="border-t md:hidden">
+            <div className="flex items-center space-x-4">
+              {isLoggedIn ? (
+                <div className="relative" ref={dropdownRef}>
+                  {/* Avatar */}
+                  <div
+                    className="text-black cursor-pointer rounded-full p-2 hover:bg-gray-200 border"
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                  >
+                    {userImage ? (
+                      <img
+                        src={userImage}
+                        alt="Profile"
+                        className="w-10 h-10 rounded-full cursor-pointer border hover:ring-2"
+                      />
+                    ) : (
+                      <DefaultUserIcon
+                        size={40}
+                        className="cursor-pointer hover:ring-2"
+                      />
+                    )}
+                  </div>
+
+                  {/* Dropdown */}
+                  {dropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
+                      <div className="px-4 py-2 border-b">
+                        <Link
+                          href="/pricing"
+                          onClick={() => setDropdownOpen(false)}
+                          className={`flex items-center ${
+                            isPremium
+                              ? "bg-yellow-400 text-black"
+                              : "bg-gray-200 text-gray-700"
+                          } px-3 py-1 rounded font-semibold`}
+                        >
+                          <FaCrown className="mr-2" />
+                          {isPremium ? "Premium Tier" : "Free Tier"}
+                        </Link>
+                      </div>
+
+                      <Link
+                        href="/user/dashboard"
+                        onClick={() => setDropdownOpen(false)}
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        My Profile
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link href="/login">
+                  <FaUser className="text-2xl text-black hover:text-blue-600 transition" />
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
 
         <div
-          className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white shadow-lg transform transition-transform duration-300 z-50 md:hidden ${
+          className={`fixed top-0 left-0 h-screen w-3/4 max-w-xs bg-white shadow-lg transform transition-transform duration-300 z-50 md:hidden ${
             mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          } overflow-y-auto`}
         >
           {/* Close Button */}
-          <div className="flex justify-end p-4 border-b">
+          <div className="flex justify-end p-4 border-b sticky top-0 bg-white z-10">
             <button onClick={toggleMobileMenu}>
               <FaTimes className="text-2xl text-gray-700 hover:text-red-600 transition" />
             </button>
           </div>
 
-          <div className="p-4 space-y-6 overflow-y-auto h-[calc(100%-4rem)]">
+          <div className="p-4 space-y-6">
             {/* Categories */}
             <div>
               <h2 className="text-sm font-semibold text-gray-500 mb-2">
@@ -687,7 +741,7 @@ const Navbar = () => {
       </nav>
 
       {/* Spacer to prevent content jump when navbar becomes sticky - only on desktop */}
-      {isSticky && <div className="hidden md:block h-20"></div>}
+      {isSticky && <div className="h-20"></div>}
     </>
   );
 };
